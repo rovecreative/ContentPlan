@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROVE Content Plan - October 2026 (Realtime Studio)</title>
+    <title>ROVE Content Plan - October 2026 (Firestore Studio)</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Firebase JS SDK (v10.8.0) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -85,14 +81,14 @@
                         <h1 class="text-xl font-bold tracking-tight text-white">ROVE Content Plan</h1>
                         <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/30">October 2026</span>
                     </div>
-                    <p class="text-xs text-slate-400">Interactive Studio • Real-Time Firebase Sync Engine</p>
+                    <p class="text-xs text-slate-400">Interactive Studio • Realtime Firestore Engine</p>
                 </div>
             </div>
 
-            <!-- Realtime Status Indicator -->
+            <!-- Realtime Sync Indicator -->
             <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
-                <span id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                <span id="sync-text" class="text-xs text-slate-300 font-medium">Ready (Instant Load)</span>
+                <span id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                <span id="sync-text" class="text-xs text-slate-300 font-medium">Connecting Firestore...</span>
             </div>
         </div>
     </header>
@@ -144,23 +140,23 @@
         <section class="glass-card p-4 rounded-2xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
             <!-- Filter Pills -->
             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto" id="filter-container">
-                <button onclick="setFilter('all')" data-filter="all" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
-                    All (12)
+                <button id="btn-filter-all" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
+                    All
                 </button>
-                <button onclick="setFilter('Roy')" data-filter="Roy" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                <button id="btn-filter-roy" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
                     👤 Roy
                 </button>
-                <button onclick="setFilter('Hana')" data-filter="Hana" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                <button id="btn-filter-hana" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
                     👩‍💻 Hana
                 </button>
-                <button onclick="setFilter('Carousel')" data-filter="Carousel" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                <button id="btn-filter-carousel" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
                     📸 Carousel
                 </button>
-                <button onclick="setFilter('Video')" data-filter="Video" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                <button id="btn-filter-video" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
                     🎥 Video
                 </button>
                 <span class="text-slate-700 hidden lg:inline">|</span>
-                <select id="status-filter" onchange="renderContent()" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500">
+                <select id="status-filter" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500">
                     <option value="all">Semua Status</option>
                     <option value="Writing">📝 Writing</option>
                     <option value="Designing">🎨 Designing</option>
@@ -173,15 +169,15 @@
             <!-- Search Bar & View Switcher -->
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <div class="relative w-full md:w-64">
-                    <input type="text" id="search-input" onkeyup="renderContent()" placeholder="Cari naskah, topik, hook..." class="w-full bg-slate-900/90 text-xs text-slate-200 placeholder-slate-500 px-3.5 py-2 rounded-xl border border-slate-700/60 focus:outline-none focus:border-emerald-500 transition-all">
+                    <input type="text" id="search-input" placeholder="Cari naskah, topik, hook..." class="w-full bg-slate-900/90 text-xs text-slate-200 placeholder-slate-500 px-3.5 py-2 rounded-xl border border-slate-700/60 focus:outline-none focus:border-emerald-500 transition-all">
                     <svg class="w-4 h-4 text-slate-500 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
 
                 <div class="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800 shrink-0">
-                    <button id="view-grid-btn" onclick="setView('grid')" class="p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all" title="Grid View">
+                    <button id="view-grid-btn" class="p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all" title="Grid View">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     </button>
-                    <button id="view-table-btn" onclick="setView('table')" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition-all" title="Table View">
+                    <button id="view-table-btn" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition-all" title="Table View">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                     </button>
                 </div>
@@ -193,9 +189,8 @@
 
     </main>
 
-    <!-- Modal Section -->
     <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-brand-card border border-slate-700/80 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+        <div class="bg-brand-card border border-slate-700/80 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header -->
             <div class="p-5 border-b border-slate-800 flex items-start justify-between bg-slate-900/50">
                 <div class="space-y-1 pr-4">
@@ -203,26 +198,26 @@
                     <h2 class="text-lg font-bold text-white leading-snug mt-1" id="modal-title"></h2>
                     <p class="text-xs text-slate-400" id="modal-meta"></p>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-all">
+                <button id="btn-modal-close-x" class="text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
             <!-- Modal Content Body -->
             <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-300" id="modal-body">
-                <!-- Script/Slide Full Editor Generated via JS -->
+                <!-- Content dynamically filled -->
             </div>
 
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
                 <div id="toast-msg" class="text-xs font-semibold text-emerald-400 opacity-0 transition-opacity">
-                    ⚡ Perubahan Tersinkronisasi!
+                    ⚡ Perubahan Tersinkronisasi ke Firestore!
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="saveModalChanges()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20">
+                    <button id="btn-modal-save" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20">
                         Simpan & Sync Realtime
                     </button>
-                    <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">
+                    <button id="btn-modal-close" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">
                         Tutup
                     </button>
                 </div>
@@ -230,7 +225,26 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration Setup
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyCFkgsyOdPxSVVm6RnV35zioSOq7Fptzs8",
+                authDomain: "contentplan-bcbd1.firebaseapp.com",
+                projectId: "contentplan-bcbd1",
+                storageBucket: "contentplan-bcbd1.appspot.com",
+                messagingSenderId: "639365187452",
+                appId: "1:639365187452:web:217d063a4c1e4dd33986f9"
+            };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rove-content-plan-oct-2026';
+
+        // Initial Seed Items
         const DEFAULT_DATA = [
             {
                 id: 1,
@@ -398,7 +412,7 @@
                     "Slide 3: Elemen 2: Core Value / Storyline (Poin utama masalah spesifik).",
                     "Slide 4: Elemen 3: Engagement Trigger (Pertanyaan memicu komentar).",
                     "Slide 5: Elemen 4: Smooth Bridge to Offer (Menghubungkan materi ke solusi produk/workshop).",
-                    "Slide 6: Elemen 5: Clear Call to Action (Satu instruksi tegas).",
+                    "Slide 6: Elemen 6: Clear Call to Action (Satu instruksi tegas).",
                     "Slide 7: Contoh studi kasus ringkas struktur konten Rove.",
                     "Slide 8 (CTA): Save postingan ini sebagai panduan struktur konten lu berikutnya!"
                 ]
@@ -462,174 +476,78 @@
 
         const STATUSES = ['Writing', 'Designing', 'Editing', 'Revisiting', 'Uploaded'];
 
-        // Initial State populated immediately
+        // App States
         let contentData = JSON.parse(JSON.stringify(DEFAULT_DATA));
         let currentFilter = 'all';
         let currentView = 'grid';
         let activeModalId = null;
-        let dbRef = null;
-        let firebaseConnected = false;
+        
+        // Firebase Globals
+        let app, auth, db;
+        let publicCollectionRef;
 
-        // Render Immediately on load
-        window.addEventListener('DOMContentLoaded', () => {
-            renderContent();
-            initFirebase();
-        });
+        const syncDot = document.getElementById('sync-dot');
+        const syncText = document.getElementById('sync-text');
 
-        function initFirebase() {
-            const firebaseConfig = {
-                apiKey: "AIzaSyCFkgsyOdPxSVVm6RnV35zioSOq7Fptzs8",
-                authDomain: "contentplan-bcbd1.firebaseapp.com",
-                databaseURL: "https://contentplan-bcbd1-default-rtdb.firebaseio.com",
-                projectId: "contentplan-bcbd1",
-                storageBucket: "contentplan-bcbd1.appspot.com",
-                messagingSenderId: "639365187452",
-                appId: "1:639365187452:web:217d063a4c1e4dd33986f9"
-            };
-
-            const syncDot = document.getElementById('sync-dot');
-            const syncText = document.getElementById('sync-text');
-
-            // Fallback Timer: If network/firebase takes longer than 1.5s, ensure smooth local mode
-            const connectionTimeout = setTimeout(() => {
-                if (!firebaseConnected) {
-                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
-                    syncText.innerText = "Offline / Local Mode";
-                }
-            }, 1500);
-
+        async function startFirebase() {
             try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // Authenticate before querying (Rule 3)
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
                 }
 
-                // Anonymous auth to ensure Database Rule Access
-                firebase.auth().signInAnonymously().catch(err => console.warn("Anon Auth bypass/fallback active:", err));
+                // Strictly follow Rule 1 for Public Collection path
+                publicCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'items');
 
-                dbRef = firebase.database().ref('rove_content_plan_2026');
-
-                dbRef.on('value', (snapshot) => {
-                    clearTimeout(connectionTimeout);
-                    firebaseConnected = true;
-                    const data = snapshot.val();
-
-                    if (data && Array.isArray(data) && data.length > 0) {
-                        contentData = data;
-                        syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
-                        syncText.innerText = "Realtime Sync Active";
+                // Realtime Sync Listener with Rule 2 compliance (simple query)
+                onSnapshot(publicCollectionRef, (snapshot) => {
+                    if (snapshot.empty) {
+                        // Seed initial data to Firestore
+                        DEFAULT_DATA.forEach(item => {
+                            const itemDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'items', item.id.toString());
+                            setDoc(itemDocRef, item);
+                        });
                     } else {
-                        // First time initialize remote
-                        dbRef.set(DEFAULT_DATA);
-                        syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
-                        syncText.innerText = "Database Initialized";
+                        const items = [];
+                        snapshot.forEach((docSnap) => {
+                            items.push(docSnap.data());
+                        });
+                        // Sort numerically by ID
+                        items.sort((a, b) => a.id - b.id);
+                        contentData = items;
+                        renderContent();
                     }
-                    renderContent();
+
+                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                    syncText.innerText = "Firestore Realtime Active";
                 }, (error) => {
-                    console.warn("Firebase Read Notice:", error);
-                    clearTimeout(connectionTimeout);
-                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
-                    syncText.innerText = "Local Active (Sync Restricted)";
+                    console.error("Firestore Listen Error:", error);
+                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
+                    syncText.innerText = "Local Fallback Mode";
                 });
 
-            } catch (e) {
-                console.warn("Firebase Initialization Notice:", e);
-                clearTimeout(connectionTimeout);
+            } catch (err) {
+                console.error("Firebase Auth/Init Error:", err);
                 syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
-                syncText.innerText = "Local Engine Active";
+                syncText.innerText = "Local Fallback Active";
             }
         }
 
-        function pushDataToFirebase() {
-            if (dbRef && firebaseConnected) {
-                dbRef.set(contentData).catch(err => console.warn("Firebase Write fallback:", err));
+        // Write updates to Firestore
+        async function syncDocToFirestore(item) {
+            if (!auth.currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'items', item.id.toString());
+                await setDoc(docRef, item, { merge: true });
+            } catch (err) {
+                console.error("Firestore Write Error:", err);
             }
-            updateStats();
-        }
-
-        // Cycle Status on Pill Click
-        function cycleStatus(id, event) {
-            if (event) event.stopPropagation();
-            const item = contentData.find(x => x.id === id);
-            if (!item) return;
-
-            const currentIndex = STATUSES.indexOf(item.status);
-            const nextIndex = (currentIndex + 1) % STATUSES.length;
-            item.status = STATUSES[nextIndex];
-
-            pushDataToFirebase();
-            renderContent();
-        }
-
-        function updateSummaryText(id, newText) {
-            const item = contentData.find(x => x.id === id);
-            if (!item) return;
-            item.summary = newText;
-            pushDataToFirebase();
-        }
-
-        function updateStats() {
-            const counts = { Writing: 0, Designing: 0, Editing: 0, Revisiting: 0, Uploaded: 0 };
-            contentData.forEach(item => {
-                if (counts[item.status] !== undefined) counts[item.status]++;
-            });
-
-            document.getElementById('stat-writing').innerText = counts.Writing;
-            document.getElementById('stat-designing').innerText = counts.Designing;
-            document.getElementById('stat-editing').innerText = counts.Editing;
-            document.getElementById('stat-revisiting').innerText = counts.Revisiting;
-            document.getElementById('stat-uploaded').innerText = counts.Uploaded;
-        }
-
-        function getStatusBadgeHTML(status, id) {
-            const styleMap = {
-                'Writing': 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/20',
-                'Designing': 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20',
-                'Editing': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
-                'Revisiting': 'bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
-                'Uploaded': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-            };
-
-            const iconMap = {
-                'Writing': '📝',
-                'Designing': '🎨',
-                'Editing': '✂️',
-                'Revisiting': '🔄',
-                'Uploaded': '🚀'
-            };
-
-            return `
-                <button onclick="cycleStatus(${id}, event)" title="Klik untuk berganti status otomatis" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${styleMap[status] || 'bg-slate-800 text-slate-300'} transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95">
-                    <span>${iconMap[status] || '•'}</span>
-                    <span>${status}</span>
-                </button>
-            `;
-        }
-
-        function setFilter(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.dataset.filter === filter) {
-                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20";
-                } else {
-                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all";
-                }
-            });
-            renderContent();
-        }
-
-        function setView(view) {
-            currentView = view;
-            const gridBtn = document.getElementById('view-grid-btn');
-            const tableBtn = document.getElementById('view-table-btn');
-            
-            if (view === 'grid') {
-                gridBtn.className = "p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all";
-                tableBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
-            } else {
-                tableBtn.className = "p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all";
-                gridBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
-            }
-            renderContent();
         }
 
         function renderContent() {
@@ -692,6 +610,7 @@
                 `;
             }
 
+            bindDynamicEvents();
             updateStats();
         }
 
@@ -723,16 +642,16 @@
 
                         <h3 class="text-base font-bold text-white leading-snug mb-2">${item.title}</h3>
                         
-                        <!-- Inline Editable Summary -->
+                        <!-- Dynamic Summary Input -->
                         <div class="mb-4">
                             <label class="block text-[10px] text-slate-500 uppercase font-semibold mb-1">Deskripsi Ringkas (Auto Sync):</label>
-                            <textarea onchange="updateSummaryText(${item.id}, this.value)" rows="2" class="w-full bg-slate-900/80 text-xs text-slate-300 p-2 rounded-xl border border-slate-800 focus:outline-none focus:border-emerald-500 transition-all resize-none">${item.summary}</textarea>
+                            <textarea data-summary-id="${item.id}" rows="2" class="summary-textarea w-full bg-slate-900/80 text-xs text-slate-300 p-2 rounded-xl border border-slate-800 focus:outline-none focus:border-emerald-500 transition-all resize-none">${item.summary}</textarea>
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
                         <span class="text-[11px] text-slate-500 font-medium">${item.details}</span>
-                        <button onclick="openModal(${item.id})" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all flex items-center gap-1">
+                        <button data-modal-id="${item.id}" class="btn-open-modal px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all flex items-center gap-1">
                             <span>Edit Full Naskah</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
@@ -758,12 +677,97 @@
                         <div class="text-[11px] text-slate-400">${item.pillar}</div>
                     </td>
                     <td class="p-4 text-right">
-                        <button onclick="openModal(${item.id})" class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all">
+                        <button data-modal-id="${item.id}" class="btn-open-modal px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all">
                             Edit Naskah
                         </button>
                     </td>
                 </tr>
             `;
+        }
+
+        function getStatusBadgeHTML(status, id) {
+            const styleMap = {
+                'Writing': 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/20',
+                'Designing': 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20',
+                'Editing': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
+                'Revisiting': 'bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
+                'Uploaded': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+            };
+
+            const iconMap = {
+                'Writing': '📝',
+                'Designing': '🎨',
+                'Editing': '✂️',
+                'Revisiting': '🔄',
+                'Uploaded': '🚀'
+            };
+
+            return `
+                <button data-cycle-id="${id}" title="Klik untuk berganti status otomatis" class="btn-cycle-status px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${styleMap[status] || 'bg-slate-800 text-slate-300'} transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95">
+                    <span>${iconMap[status] || '•'}</span>
+                    <span>${status}</span>
+                </button>
+            `;
+        }
+
+        // Dynamic event binding after innerHTML renders
+        function bindDynamicEvents() {
+            // Cycle status handlers
+            document.querySelectorAll('.btn-cycle-status').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.cycleId);
+                    cycleStatus(id);
+                });
+            });
+
+            // Edit full modal handlers
+            document.querySelectorAll('.btn-open-modal').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.modalId);
+                    openModal(id);
+                });
+            });
+
+            // Summary textarea sync handlers
+            document.querySelectorAll('.summary-textarea').forEach(tx => {
+                tx.addEventListener('change', (e) => {
+                    const id = parseInt(tx.dataset.summaryId);
+                    updateSummaryText(id, e.target.value);
+                });
+            });
+        }
+
+        function cycleStatus(id) {
+            const item = contentData.find(x => x.id === id);
+            if (!item) return;
+
+            const currentIndex = STATUSES.indexOf(item.status);
+            const nextIndex = (currentIndex + 1) % STATUSES.length;
+            item.status = STATUSES[nextIndex];
+
+            syncDocToFirestore(item);
+            renderContent();
+        }
+
+        function updateSummaryText(id, newText) {
+            const item = contentData.find(x => x.id === id);
+            if (!item) return;
+            item.summary = newText;
+            syncDocToFirestore(item);
+        }
+
+        function updateStats() {
+            const counts = { Writing: 0, Designing: 0, Editing: 0, Revisiting: 0, Uploaded: 0 };
+            contentData.forEach(item => {
+                if (counts[item.status] !== undefined) counts[item.status]++;
+            });
+
+            document.getElementById('stat-writing').innerText = counts.Writing;
+            document.getElementById('stat-designing').innerText = counts.Designing;
+            document.getElementById('stat-editing').innerText = counts.Editing;
+            document.getElementById('stat-revisiting').innerText = counts.Revisiting;
+            document.getElementById('stat-uploaded').innerText = counts.Uploaded;
         }
 
         function openModal(id) {
@@ -832,7 +836,7 @@
                 item.script = linesArray;
             }
 
-            pushDataToFirebase();
+            syncDocToFirestore(item);
             renderContent();
 
             const toast = document.getElementById('toast-msg');
@@ -848,10 +852,69 @@
             activeModalId = null;
         }
 
+        // Attach static UI listeners
+        document.getElementById('btn-filter-all').onclick = () => setFilter('all');
+        document.getElementById('btn-filter-roy').onclick = () => setFilter('Roy');
+        document.getElementById('btn-filter-hana').onclick = () => setFilter('Hana');
+        document.getElementById('btn-filter-carousel').onclick = () => setFilter('Carousel');
+        document.getElementById('btn-filter-video').onclick = () => setFilter('Video');
+
+        document.getElementById('status-filter').onchange = renderContent;
+        document.getElementById('search-input').onkeyup = renderContent;
+
+        document.getElementById('view-grid-btn').onclick = () => setView('grid');
+        document.getElementById('view-table-btn').onclick = () => setView('table');
+
+        document.getElementById('btn-modal-close-x').onclick = closeModal;
+        document.getElementById('btn-modal-close').onclick = closeModal;
+        document.getElementById('btn-modal-save').onclick = saveModalChanges;
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            const buttons = {
+                'all': 'btn-filter-all',
+                'Roy': 'btn-filter-roy',
+                'Hana': 'btn-filter-hana',
+                'Carousel': 'btn-filter-carousel',
+                'Video': 'btn-filter-video'
+            };
+
+            Object.keys(buttons).forEach(key => {
+                const btn = document.getElementById(buttons[key]);
+                if (key === filter) {
+                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20";
+                } else {
+                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all";
+                }
+            });
+            renderContent();
+        }
+
+        function setView(view) {
+            currentView = view;
+            const gridBtn = document.getElementById('view-grid-btn');
+            const tableBtn = document.getElementById('view-table-btn');
+            
+            if (view === 'grid') {
+                gridBtn.className = "p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all";
+                tableBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
+            } else {
+                tableBtn.className = "p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all";
+                gridBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
+            }
+            renderContent();
+        }
+
         window.onclick = function(event) {
             const modal = document.getElementById('detail-modal');
             if (event.target === modal) closeModal();
         }
+
+        // Initialize App on DOM Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderContent();
+            startFirebase();
+        });
     </script>
 </body>
 </html>
