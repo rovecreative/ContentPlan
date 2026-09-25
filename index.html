@@ -9,7 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
+    <!-- Firebase JS SDK (v10.8.0) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
@@ -89,8 +91,8 @@
 
             <!-- Realtime Status Indicator -->
             <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
-                <span id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-                <span id="sync-text" class="text-xs text-slate-400 font-medium">Connecting...</span>
+                <span id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span id="sync-text" class="text-xs text-slate-300 font-medium">Ready (Instant Load)</span>
             </div>
         </div>
     </header>
@@ -191,6 +193,7 @@
 
     </main>
 
+    <!-- Modal Section -->
     <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-brand-card border border-slate-700/80 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
             <!-- Modal Header -->
@@ -213,7 +216,7 @@
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
                 <div id="toast-msg" class="text-xs font-semibold text-emerald-400 opacity-0 transition-opacity">
-                    ⚡ Perubahan Tersinkron Ke Firebase!
+                    ⚡ Perubahan Tersinkronisasi!
                 </div>
                 <div class="flex gap-2">
                     <button onclick="saveModalChanges()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20">
@@ -228,23 +231,6 @@
     </div>
 
     <script>
-        // Firebase Configuration Credentials
-        const firebaseConfig = {
-            apiKey: "AIzaSyCFkgsyOdPxSVVm6RnV35zioSOq7Fptzs8",
-            authDomain: "contentplan-bcbd1.firebaseapp.com",
-            databaseURL: "https://contentplan-bcbd1-default-rtdb.firebaseio.com",
-            projectId: "contentplan-bcbd1",
-            storageBucket: "contentplan-bcbd1.firebasestorage.app",
-            messagingSenderId: "639365187452",
-            appId: "1:639365187452:web:217d063a4c1e4dd33986f9",
-            measurementId: "G-W74CWVNEMT"
-        };
-
-        // Initialize Firebase Realtime Database
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const contentRef = db.ref('rove_content_plan_2026');
-
         const DEFAULT_DATA = [
             {
                 id: 1,
@@ -474,39 +460,89 @@
             }
         ];
 
-        // 5 Production Statuses
         const STATUSES = ['Writing', 'Designing', 'Editing', 'Revisiting', 'Uploaded'];
 
-        let contentData = [];
+        // Initial State populated immediately
+        let contentData = JSON.parse(JSON.stringify(DEFAULT_DATA));
         let currentFilter = 'all';
         let currentView = 'grid';
         let activeModalId = null;
+        let dbRef = null;
+        let firebaseConnected = false;
 
-        contentRef.on('value', (snapshot) => {
-            const data = snapshot.val();
+        // Render Immediately on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderContent();
+            initFirebase();
+        });
+
+        function initFirebase() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCFkgsyOdPxSVVm6RnV35zioSOq7Fptzs8",
+                authDomain: "contentplan-bcbd1.firebaseapp.com",
+                databaseURL: "https://contentplan-bcbd1-default-rtdb.firebaseio.com",
+                projectId: "contentplan-bcbd1",
+                storageBucket: "contentplan-bcbd1.appspot.com",
+                messagingSenderId: "639365187452",
+                appId: "1:639365187452:web:217d063a4c1e4dd33986f9"
+            };
+
             const syncDot = document.getElementById('sync-dot');
             const syncText = document.getElementById('sync-text');
 
-            if (data) {
-                contentData = data;
-                syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
-                syncText.innerText = "Realtime Active";
-            } else {
-                // Initialize default dataset in Firebase if empty
-                contentRef.set(DEFAULT_DATA);
-                contentData = DEFAULT_DATA;
+            // Fallback Timer: If network/firebase takes longer than 1.5s, ensure smooth local mode
+            const connectionTimeout = setTimeout(() => {
+                if (!firebaseConnected) {
+                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
+                    syncText.innerText = "Offline / Local Mode";
+                }
+            }, 1500);
+
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+
+                // Anonymous auth to ensure Database Rule Access
+                firebase.auth().signInAnonymously().catch(err => console.warn("Anon Auth bypass/fallback active:", err));
+
+                dbRef = firebase.database().ref('rove_content_plan_2026');
+
+                dbRef.on('value', (snapshot) => {
+                    clearTimeout(connectionTimeout);
+                    firebaseConnected = true;
+                    const data = snapshot.val();
+
+                    if (data && Array.isArray(data) && data.length > 0) {
+                        contentData = data;
+                        syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                        syncText.innerText = "Realtime Sync Active";
+                    } else {
+                        // First time initialize remote
+                        dbRef.set(DEFAULT_DATA);
+                        syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
+                        syncText.innerText = "Database Initialized";
+                    }
+                    renderContent();
+                }, (error) => {
+                    console.warn("Firebase Read Notice:", error);
+                    clearTimeout(connectionTimeout);
+                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
+                    syncText.innerText = "Local Active (Sync Restricted)";
+                });
+
+            } catch (e) {
+                console.warn("Firebase Initialization Notice:", e);
+                clearTimeout(connectionTimeout);
                 syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
-                syncText.innerText = "Database Initialized";
+                syncText.innerText = "Local Engine Active";
             }
-            renderContent();
-        }, (error) => {
-            console.error("Firebase Read Error: ", error);
-            document.getElementById('sync-dot').className = "w-2.5 h-2.5 rounded-full bg-rose-500";
-            document.getElementById('sync-text').innerText = "Sync Error";
-        });
+        }
 
         function pushDataToFirebase() {
-            contentRef.set(contentData);
+            if (dbRef && firebaseConnected) {
+                dbRef.set(contentData).catch(err => console.warn("Firebase Write fallback:", err));
+            }
             updateStats();
         }
 
@@ -521,6 +557,7 @@
             item.status = STATUSES[nextIndex];
 
             pushDataToFirebase();
+            renderContent();
         }
 
         function updateSummaryText(id, newText) {
@@ -561,14 +598,13 @@
             };
 
             return `
-                <button onclick="cycleStatus(${id}, event)" title="Klik untuk berganti status secara otomatis" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${styleMap[status] || 'bg-slate-800 text-slate-300'} transition-all flex items-center gap-1.5 shadow-sm">
+                <button onclick="cycleStatus(${id}, event)" title="Klik untuk berganti status otomatis" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${styleMap[status] || 'bg-slate-800 text-slate-300'} transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95">
                     <span>${iconMap[status] || '•'}</span>
                     <span>${status}</span>
                 </button>
             `;
         }
 
-        // Filter Logic
         function setFilter(filter) {
             currentFilter = filter;
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -598,8 +634,10 @@
 
         function renderContent() {
             const container = document.getElementById('content-container');
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const statusFilter = document.getElementById('status-filter').value;
+            if (!container) return;
+
+            const searchVal = (document.getElementById('search-input')?.value || '').toLowerCase();
+            const statusFilter = document.getElementById('status-filter')?.value || 'all';
 
             const filtered = contentData.filter(item => {
                 const matchesFilter = currentFilter === 'all' || 
@@ -622,6 +660,7 @@
                         <p class="text-slate-400 text-sm">Tidak ada naskah yang sesuai dengan kriteria pencarian atau status.</p>
                     </div>
                 `;
+                updateStats();
                 return;
             }
 
@@ -684,9 +723,9 @@
 
                         <h3 class="text-base font-bold text-white leading-snug mb-2">${item.title}</h3>
                         
-                        <!-- Editable Ringkasan Deskripsi Sync Realtime -->
+                        <!-- Inline Editable Summary -->
                         <div class="mb-4">
-                            <label class="block text-[10px] text-slate-500 uppercase font-semibold mb-1">Deskripsi Ringkas (Sync Otomatis):</label>
+                            <label class="block text-[10px] text-slate-500 uppercase font-semibold mb-1">Deskripsi Ringkas (Auto Sync):</label>
                             <textarea onchange="updateSummaryText(${item.id}, this.value)" rows="2" class="w-full bg-slate-900/80 text-xs text-slate-300 p-2 rounded-xl border border-slate-800 focus:outline-none focus:border-emerald-500 transition-all resize-none">${item.summary}</textarea>
                         </div>
                     </div>
@@ -766,7 +805,7 @@
                         <label class="block text-xs font-semibold text-slate-400">
                             ${item.type === 'Carousel' ? 'Edit Struktur Slide Carousel (1 Baris = 1 Slide):' : 'Edit Full Script & Timecode (1 Baris = 1 Section):'}
                         </label>
-                        <span class="text-[10px] text-emerald-400 font-mono">Real-Time Sync Ready</span>
+                        <span class="text-[10px] text-emerald-400 font-mono">Sync Ready</span>
                     </div>
                     <textarea id="modal-edit-lines" rows="10" class="w-full bg-slate-900 text-xs font-mono text-slate-200 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all leading-relaxed">${scriptLines}</textarea>
                 </div>
@@ -794,6 +833,7 @@
             }
 
             pushDataToFirebase();
+            renderContent();
 
             const toast = document.getElementById('toast-msg');
             toast.classList.remove('opacity-0');
