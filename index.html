@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROVE Content Plan - October 2026</title>
+    <title>ROVE Content Plan - October 2026 (Interactive Studio)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -15,6 +15,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
                         brand: {
@@ -24,6 +25,7 @@
                             emerald: '#10B981',
                             cyan: '#06B6D4',
                             amber: '#F59E0B',
+                            purple: '#8B5CF6',
                             roy: '#3B82F6',
                             hana: '#EC4899',
                         }
@@ -39,8 +41,8 @@
             font-family: 'Inter', sans-serif;
         }
         .glass-card {
-            background: rgba(19, 26, 39, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(19, 26, 39, 0.75);
+            backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .glass-card:hover {
@@ -65,7 +67,7 @@
 </head>
 <body class="min-h-screen pb-16 antialiased">
 
-    <header class="sticky top-0 z-30 border-b border-slate-800 bg-brand-dark/80 backdrop-blur-md">
+    <header class="sticky top-0 z-30 border-b border-slate-800 bg-brand-dark/90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center font-black text-slate-950 text-xl tracking-wider shadow-lg shadow-emerald-500/20">
@@ -76,20 +78,16 @@
                         <h1 class="text-xl font-bold tracking-tight text-white">ROVE Content Plan</h1>
                         <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/30">October 2026</span>
                     </div>
-                    <p class="text-xs text-slate-400">Exclusive Micro-Cohort & Digital Asset Development</p>
+                    <p class="text-xs text-slate-400">Interactive Studio • Real-Time Script Editor & Status Tracker</p>
                 </div>
             </div>
 
-            <!-- Quick Action Badges -->
-            <div class="flex items-center gap-2 text-xs">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">
-                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                    Roy: Mindset & Strategy
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20 font-medium">
-                    <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
-                    Hana: Technical & Editing
-                </span>
+            <!-- Global Action Controls -->
+            <div class="flex items-center gap-2">
+                <button onclick="resetDataToDefault()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all border border-slate-700 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    Reset Template
+                </button>
             </div>
         </div>
     </header>
@@ -97,74 +95,75 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
 
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
-                <div class="absolute -right-2 -bottom-2 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
-                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Output</p>
-                <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-white">12</span>
-                    <span class="text-xs text-slate-400">posts / month</span>
+            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-amber-500">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">🎨 Designing</span>
+                    <span id="stat-designing" class="text-2xl font-black text-white">0</span>
                 </div>
-                <p class="text-[11px] text-emerald-400 mt-2 font-medium">100% Calendar Covered</p>
+                <p class="text-[11px] text-slate-400 mt-1">Design & Visual Assets</p>
             </div>
 
-            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
-                <div class="absolute -right-2 -bottom-2 w-16 h-16 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all"></div>
-                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Roy (Carousel)</p>
-                <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-blue-400">6</span>
-                    <span class="text-xs text-slate-400">Posts (6-8 Slides)</span>
+            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-cyan-500">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-cyan-400">✂️ Editing</span>
+                    <span id="stat-editing" class="text-2xl font-black text-white">0</span>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-2">Mindset & Medsos Mgmt</p>
+                <p class="text-[11px] text-slate-400 mt-1">Video Edit / Cut / SFX</p>
             </div>
 
-            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
-                <div class="absolute -right-2 -bottom-2 w-16 h-16 bg-pink-500/10 rounded-full blur-xl group-hover:bg-pink-500/20 transition-all"></div>
-                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Hana (Reels)</p>
-                <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-pink-400">6</span>
-                    <span class="text-xs text-slate-400">Videos (&lt; 60s)</span>
+            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-purple-500">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-purple-400">🔄 Revisiting</span>
+                    <span id="stat-revisiting" class="text-2xl font-black text-white">0</span>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-2">Camera & Editing Technicals</p>
+                <p class="text-[11px] text-slate-400 mt-1">Review & Script Adjust</p>
             </div>
 
-            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
-                <div class="absolute -right-2 -bottom-2 w-16 h-16 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all"></div>
-                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Schedule Cadence</p>
-                <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-2xl font-bold text-amber-400">2 - 3 Days</span>
+            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">🚀 Uploaded</span>
+                    <span id="stat-uploaded" class="text-2xl font-black text-white">0</span>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-2">Oct 2 &ndash; Oct 30, 2026</p>
+                <p class="text-[11px] text-slate-400 mt-1">Ready / Published on Socials</p>
             </div>
         </section>
 
         <section class="glass-card p-4 rounded-2xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
             <!-- Filter Pills -->
             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto" id="filter-container">
-                <button onclick="setFilter('all')" data-filter="all" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
-                    All Posts (12)
+                <button onclick="setFilter('all')" data-filter="all" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
+                    All (12)
                 </button>
-                <button onclick="setFilter('Roy')" data-filter="Roy" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    👤 Roy (6)
+                <button onclick="setFilter('Roy')" data-filter="Roy" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                    👤 Roy
                 </button>
-                <button onclick="setFilter('Hana')" data-filter="Hana" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    👩‍💻 Hana (6)
+                <button onclick="setFilter('Hana')" data-filter="Hana" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                    👩‍💻 Hana
                 </button>
-                <button onclick="setFilter('Carousel')" data-filter="Carousel" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                <button onclick="setFilter('Carousel')" data-filter="Carousel" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
                     📸 Carousel
                 </button>
-                <button onclick="setFilter('Video')" data-filter="Video" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    🎥 Video Reels
+                <button onclick="setFilter('Video')" data-filter="Video" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
+                    🎥 Video
                 </button>
+                <span class="text-slate-700 hidden lg:inline">|</span>
+                <select id="status-filter" onchange="renderContent()" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500">
+                    <option value="all">Semua Status</option>
+                    <option value="Designing">🎨 Designing</option>
+                    <option value="Editing">✂️ Editing</option>
+                    <option value="Revisiting">🔄 Revisiting</option>
+                    <option value="Uploaded">🚀 Uploaded</option>
+                </select>
             </div>
 
-            <!-- Search Bar & Layout Switcher -->
+            <!-- Search Bar & View Switcher -->
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <div class="relative w-full md:w-64">
-                    <input type="text" id="search-input" onkeyup="renderContent()" placeholder="Cari topik, hook, pillar..." class="w-full bg-slate-900/90 text-xs text-slate-200 placeholder-slate-500 px-3.5 py-2.5 rounded-xl border border-slate-700/60 focus:outline-none focus:border-emerald-500 transition-all">
+                    <input type="text" id="search-input" onkeyup="renderContent()" placeholder="Cari naskah, topik, hook..." class="w-full bg-slate-900/90 text-xs text-slate-200 placeholder-slate-500 px-3.5 py-2 rounded-xl border border-slate-700/60 focus:outline-none focus:border-emerald-500 transition-all">
                     <svg class="w-4 h-4 text-slate-500 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
 
-                <div class="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+                <div class="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800 shrink-0">
                     <button id="view-grid-btn" onclick="setView('grid')" class="p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all" title="Grid View">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     </button>
@@ -175,42 +174,41 @@
             </div>
         </section>
 
-        <div id="content-container">
-            <!-- Injected via JavaScript -->
-        </div>
+        <!-- Dynamic Content Mount Point -->
+        <div id="content-container"></div>
 
     </main>
 
     <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-brand-card border border-slate-700/80 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+        <div class="bg-brand-card border border-slate-700/80 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
             <!-- Modal Header -->
             <div class="p-5 border-b border-slate-800 flex items-start justify-between bg-slate-900/50">
                 <div class="space-y-1 pr-4">
-                    <div class="flex items-center gap-2" id="modal-tags"></div>
+                    <div class="flex items-center gap-2 flex-wrap" id="modal-tags"></div>
                     <h2 class="text-lg font-bold text-white leading-snug mt-1" id="modal-title"></h2>
                     <p class="text-xs text-slate-400" id="modal-meta"></p>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-all">
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
             <!-- Modal Content Body -->
-            <div class="p-6 overflow-y-auto space-y-4 text-sm text-slate-300" id="modal-body">
-                <!-- Dynamic Modal Script/Slide Content -->
+            <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-300" id="modal-body">
+                <!-- Modal Script/Slide Full Editor -->
             </div>
 
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
                 <div id="toast-msg" class="text-xs font-semibold text-emerald-400 opacity-0 transition-opacity">
-                    Copied to clipboard!
+                    💾 Perubahan Berhasil Disimpan!
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="copyModalContent()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20">
-                        Copy Full Script / Breakdown
+                    <button onclick="saveModalChanges()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20">
+                        Simpan Perubahan
                     </button>
                     <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">
-                        Close
+                        Tutup
                     </button>
                 </div>
             </div>
@@ -218,12 +216,13 @@
     </div>
 
     <script>
-        const contentData = [
+        const DEFAULT_DATA = [
             {
                 id: 1,
                 date: "October 2, 2026",
                 pic: "Roy",
                 type: "Carousel",
+                status: "Designing",
                 pillar: "Mindset & Self-Development",
                 title: "Kenapa 90% Orang Gagal Bangun Aset Digital di 2026?",
                 details: "7 Slides Breakdown",
@@ -243,6 +242,7 @@
                 date: "October 5, 2026",
                 pic: "Hana",
                 type: "Video",
+                status: "Editing",
                 pillar: "Teknis Video & Lighting",
                 title: "Cara Bikin Video HP Kelihatan 'Mahal' Cuma Pakai 1 Lampu",
                 details: "45 Seconds Reels",
@@ -259,6 +259,7 @@
                 date: "October 8, 2026",
                 pic: "Roy",
                 type: "Carousel",
+                status: "Designing",
                 pillar: "Scriptwriting & Social Media Growth",
                 title: "5 Formula Hook yang Bikin Audience Berhenti Scrolling dalam 3 Detik",
                 details: "8 Slides Breakdown",
@@ -279,6 +280,7 @@
                 date: "October 11, 2026",
                 pic: "Hana",
                 type: "Video",
+                status: "Editing",
                 pillar: "Teknis Kamera & Export Setting",
                 title: "Settingan Kamera HP Wajib Buat Reels Biar Gak Pecah saat Di-upload",
                 details: "40 Seconds Reels",
@@ -295,6 +297,7 @@
                 date: "October 13, 2026",
                 pic: "Roy",
                 type: "Carousel",
+                status: "Revisiting",
                 pillar: "Workflow & Management",
                 title: "Cara Bikin Naskah Konten 1 Minggu Cuma Dalam 1 Jam (Sistem Batching)",
                 details: "7 Slides Breakdown",
@@ -314,6 +317,7 @@
                 date: "October 16, 2026",
                 pic: "Hana",
                 type: "Video",
+                status: "Editing",
                 pillar: "Video Editing (CapCut/Premiere)",
                 title: "Trik Editing Sound Effect (SFX) yang Bikin Video Lu Gak Bosenin",
                 details: "50 Seconds Reels",
@@ -330,6 +334,7 @@
                 date: "October 19, 2026",
                 pic: "Roy",
                 type: "Carousel",
+                status: "Designing",
                 pillar: "Self-Development & Mindset",
                 title: "'Rasa Malu & Takut Diejek Teman': Hambatan Utama Creator Pemula",
                 details: "8 Slides Breakdown",
@@ -350,6 +355,7 @@
                 date: "October 22, 2026",
                 pic: "Hana",
                 type: "Video",
+                status: "Editing",
                 pillar: "Teknis Videografi",
                 title: "Rahasia Framing & Komposisi Kamera Biar Lu Kelihatan Pede",
                 details: "45 Seconds Reels",
@@ -366,6 +372,7 @@
                 date: "October 24, 2026",
                 pic: "Roy",
                 type: "Carousel",
+                status: "Revisiting",
                 pillar: "Medsos Management & Strategy",
                 title: "Membedah Anatomi Konten Viral yang Tetap Menghasilkan Penjualan",
                 details: "8 Slides Breakdown",
@@ -386,6 +393,7 @@
                 date: "October 26, 2026",
                 pic: "Hana",
                 type: "Video",
+                status: "Editing",
                 pillar: "Post-Production & Editing",
                 title: "Trik Color Grading Cepat di HP Pakai Aplikasi Gratisan",
                 details: "50 Seconds Reels",
@@ -402,6 +410,7 @@
                 date: "October 28, 2026",
                 pic: "Roy",
                 type: "Carousel",
+                status: "Designing",
                 pillar: "Workflow & Consistency",
                 title: "Check List Rutinitas Content Creator: Dari Ide Sampai Rilis",
                 details: "7 Slides Breakdown",
@@ -421,6 +430,7 @@
                 date: "October 30, 2026",
                 pic: "Hana",
                 type: "Video",
+                status: "Uploaded",
                 pillar: "Teknis Equipment & Setup",
                 title: "Checklist Alat Ngonten Pemula dari Modal Rp0 sampai Siap Upgrade",
                 details: "55 Seconds Reels",
@@ -435,24 +445,105 @@
             }
         ];
 
+        const STATUSES = ['Designing', 'Editing', 'Revisiting', 'Uploaded'];
+
+        // Load data from localStorage or fallback
+        let contentData = JSON.parse(localStorage.getItem('rove_content_plan_2026')) || DEFAULT_DATA;
         let currentFilter = 'all';
         let currentView = 'grid';
-        let activeModalData = null;
+        let activeModalId = null;
+
+        function saveData() {
+            localStorage.setItem('rove_content_plan_2026', JSON.stringify(contentData));
+            updateStats();
+        }
+
+        function resetDataToDefault() {
+            if (confirm("Reset seluruh naskah dan status ke template awal?")) {
+                contentData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+                saveData();
+                renderContent();
+            }
+        }
+
+        // Cycle Status on Pill Click
+        function cycleStatus(id, event) {
+            if (event) event.stopPropagation();
+            const item = contentData.find(x => x.id === id);
+            if (!item) return;
+
+            const currentIndex = STATUSES.indexOf(item.status);
+            const nextIndex = (currentIndex + 1) % STATUSES.length;
+            item.status = STATUSES[nextIndex];
+
+            saveData();
+            renderContent();
+        }
+
+        function setSpecificStatus(id, newStatus, event) {
+            if (event) event.stopPropagation();
+            const item = contentData.find(x => x.id === id);
+            if (!item) return;
+            item.status = newStatus;
+            saveData();
+            renderContent();
+        }
+
+        function updateSummaryText(id, newText) {
+            const item = contentData.find(x => x.id === id);
+            if (!item) return;
+            item.summary = newText;
+            saveData();
+        }
+
+        function updateStats() {
+            const counts = { Designing: 0, Editing: 0, Revisiting: 0, Uploaded: 0 };
+            contentData.forEach(item => {
+                if (counts[item.status] !== undefined) counts[item.status]++;
+            });
+
+            document.getElementById('stat-designing').innerText = counts.Designing;
+            document.getElementById('stat-editing').innerText = counts.Editing;
+            document.getElementById('stat-revisiting').innerText = counts.Revisiting;
+            document.getElementById('stat-uploaded').innerText = counts.Uploaded;
+        }
+
+        function getStatusBadgeHTML(status, id) {
+            const styleMap = {
+                'Designing': 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20',
+                'Editing': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
+                'Revisiting': 'bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
+                'Uploaded': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+            };
+
+            const iconMap = {
+                'Designing': '🎨',
+                'Editing': '✂️',
+                'Revisiting': '🔄',
+                'Uploaded': '🚀'
+            };
+
+            return `
+                <button onclick="cycleStatus(${id}, event)" title="Klik untuk ubah status" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${styleMap[status] || 'bg-slate-800 text-slate-300'} transition-all flex items-center gap-1.5 shadow-sm">
+                    <span>${iconMap[status] || '•'}</span>
+                    <span>${status}</span>
+                </button>
+            `;
+        }
 
         // Filter Logic
         function setFilter(filter) {
             currentFilter = filter;
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 if (btn.dataset.filter === filter) {
-                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20";
+                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20";
                 } else {
-                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all";
+                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all";
                 }
             });
             renderContent();
         }
 
-        // View Logic (Grid vs Table)
         function setView(view) {
             currentView = view;
             const gridBtn = document.getElementById('view-grid-btn');
@@ -468,28 +559,30 @@
             renderContent();
         }
 
-        // Render Functions
         function renderContent() {
             const container = document.getElementById('content-container');
             const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
 
             const filtered = contentData.filter(item => {
                 const matchesFilter = currentFilter === 'all' || 
                     item.pic === currentFilter || 
                     item.type === currentFilter;
                 
+                const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+
                 const matchesSearch = item.title.toLowerCase().includes(searchVal) ||
                     item.pillar.toLowerCase().includes(searchVal) ||
                     item.summary.toLowerCase().includes(searchVal) ||
                     item.date.toLowerCase().includes(searchVal);
 
-                return matchesFilter && matchesSearch;
+                return matchesFilter && matchesStatus && matchesSearch;
             });
 
             if (filtered.length === 0) {
                 container.innerHTML = `
                     <div class="glass-card p-12 text-center rounded-2xl">
-                        <p class="text-slate-400 text-sm">Tidak ada konten yang sesuai dengan filter atau pencarian.</p>
+                        <p class="text-slate-400 text-sm">Tidak ada naskah yang sesuai dengan kriteria pencarian atau status.</p>
                     </div>
                 `;
                 return;
@@ -508,9 +601,10 @@
                             <thead class="bg-slate-900/80 text-slate-400 border-b border-slate-800 uppercase tracking-wider">
                                 <tr>
                                     <th class="p-4">Tanggal</th>
+                                    <th class="p-4">Status</th>
                                     <th class="p-4">PIC</th>
                                     <th class="p-4">Format</th>
-                                    <th class="p-4">Pillar & Topik</th>
+                                    <th class="p-4">Pillar & Naskah Topik</th>
                                     <th class="p-4 text-right">Aksi</th>
                                 </tr>
                             </thead>
@@ -521,6 +615,8 @@
                     </div>
                 `;
             }
+
+            updateStats();
         }
 
         function createCardHTML(item) {
@@ -544,16 +640,25 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] font-medium text-emerald-400 tracking-wide uppercase mb-1">${item.pillar}</p>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <p class="text-[11px] font-medium text-emerald-400 tracking-wide uppercase">${item.pillar}</p>
+                            ${getStatusBadgeHTML(item.status, item.id)}
+                        </div>
+
                         <h3 class="text-base font-bold text-white leading-snug mb-2">${item.title}</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed mb-4">${item.summary}</p>
+                        
+                        <!-- Editable Ringkasan Deskripsi -->
+                        <div class="mb-4">
+                            <label class="block text-[10px] text-slate-500 uppercase font-semibold mb-1">Deskripsi Ringkas (Dapat Diubah):</label>
+                            <textarea onchange="updateSummaryText(${item.id}, this.value)" rows="2" class="w-full bg-slate-900/80 text-xs text-slate-300 p-2 rounded-xl border border-slate-800 focus:outline-none focus:border-emerald-500 transition-all resize-none">${item.summary}</textarea>
+                        </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
                         <span class="text-[11px] text-slate-500 font-medium">${item.details}</span>
                         <button onclick="openModal(${item.id})" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all flex items-center gap-1">
-                            <span>Detail Script</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            <span>Edit Full Naskah</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
                     </div>
                 </div>
@@ -569,6 +674,7 @@
             return `
                 <tr class="hover:bg-slate-800/40 transition-all">
                     <td class="p-4 font-medium whitespace-nowrap text-slate-300">${item.date}</td>
+                    <td class="p-4 whitespace-nowrap">${getStatusBadgeHTML(item.status, item.id)}</td>
                     <td class="p-4"><span class="px-2 py-0.5 rounded-md text-[10px] font-semibold border ${picBadgeClass}">${item.pic}</span></td>
                     <td class="p-4 whitespace-nowrap">${item.type} <span class="text-slate-500">(${item.details})</span></td>
                     <td class="p-4">
@@ -577,7 +683,7 @@
                     </td>
                     <td class="p-4 text-right">
                         <button onclick="openModal(${item.id})" class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all">
-                            View
+                            Edit Naskah
                         </button>
                     </td>
                 </tr>
@@ -588,7 +694,7 @@
         function openModal(id) {
             const item = contentData.find(x => x.id === id);
             if (!item) return;
-            activeModalData = item;
+            activeModalId = id;
 
             const modal = document.getElementById('detail-modal');
             const isRoy = item.pic === 'Roy';
@@ -596,69 +702,83 @@
             document.getElementById('modal-tags').innerHTML = `
                 <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold border ${isRoy ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-pink-500/10 text-pink-400 border-pink-500/20'}">${item.pic}</span>
                 <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold border bg-slate-800 text-slate-300 border-slate-700">${item.type}</span>
+                <span class="text-xs font-semibold text-slate-400">Status:</span>
+                <select id="modal-status-select" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-lg px-2 py-1 focus:outline-none focus:border-emerald-500">
+                    ${STATUSES.map(s => `<option value="${s}" ${s === item.status ? 'selected' : ''}>${s}</option>`).join('')}
+                </select>
             `;
             
             document.getElementById('modal-title').innerText = item.title;
             document.getElementById('modal-meta').innerText = `${item.date} • ${item.pillar} • ${item.details}`;
 
             const modalBody = document.getElementById('modal-body');
+            const scriptLines = item.type === 'Carousel' ? item.slides.join('\n') : item.script.join('\n');
             
-            if (item.type === 'Carousel') {
-                modalBody.innerHTML = `
-                    <p class="text-xs text-slate-400 mb-3">Slide Breakdown Structure (Roy):</p>
-                    <div class="space-y-2.5">
-                        ${item.slides.map((s, idx) => `
-                            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex gap-3">
-                                <span class="text-xs font-bold text-blue-400 shrink-0">S${idx+1}</span>
-                                <p class="text-xs text-slate-200 leading-relaxed">${s}</p>
-                            </div>
-                        `).join('')}
+            modalBody.innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Judul / Topik Utama:</label>
+                    <input type="text" id="modal-edit-title" value="${item.title}" class="w-full bg-slate-900 text-sm text-white p-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all font-semibold">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Deskripsi Ringkas / Summary:</label>
+                    <input type="text" id="modal-edit-summary" value="${item.summary}" class="w-full bg-slate-900 text-xs text-slate-200 p-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all">
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold text-slate-400">
+                            ${item.type === 'Carousel' ? 'Edit Struktur Slide Carousel (1 Baris = 1 Slide):' : 'Edit Full Script & Timecode (1 Baris = 1 Section):'}
+                        </label>
+                        <span class="text-[10px] text-emerald-400 font-mono">Real-Time Text Editor</span>
                     </div>
-                `;
-            } else {
-                modalBody.innerHTML = `
-                    <p class="text-xs text-slate-400 mb-3">Time-stamped Script & Visual Breakdown (Hana):</p>
-                    <div class="space-y-2.5">
-                        ${item.script.map(sc => `
-                            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-                                <p class="text-xs text-slate-200 leading-relaxed font-mono">${sc}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
+                    <textarea id="modal-edit-lines" rows="10" class="w-full bg-slate-900 text-xs font-mono text-slate-200 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all leading-relaxed">${scriptLines}</textarea>
+                </div>
+            `;
 
             modal.classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('detail-modal').classList.add('hidden');
-        }
+        function saveModalChanges() {
+            if (!activeModalId) return;
+            const item = contentData.find(x => x.id === activeModalId);
+            if (!item) return;
 
-        function copyModalContent() {
-            if (!activeModalData) return;
-            let textToCopy = `${activeModalData.title}\n(${activeModalData.date} | PIC: ${activeModalData.pic})\n\n`;
-            
-            if (activeModalData.type === 'Carousel') {
-                textToCopy += activeModalData.slides.join('\n');
+            item.title = document.getElementById('modal-edit-title').value;
+            item.summary = document.getElementById('modal-edit-summary').value;
+            item.status = document.getElementById('modal-status-select').value;
+
+            const linesText = document.getElementById('modal-edit-lines').value;
+            const linesArray = linesText.split('\n').filter(line => line.trim() !== '');
+
+            if (item.type === 'Carousel') {
+                item.slides = linesArray;
             } else {
-                textToCopy += activeModalData.script.join('\n');
+                item.script = linesArray;
             }
 
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const toast = document.getElementById('toast-msg');
-                toast.classList.remove('opacity-0');
-                setTimeout(() => toast.classList.add('opacity-0'), 2000);
-            });
+            saveData();
+            renderContent();
+
+            const toast = document.getElementById('toast-msg');
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                closeModal();
+            }, 800);
         }
 
-        // Close Modal on Outside Click
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            activeModalId = null;
+        }
+
         window.onclick = function(event) {
             const modal = document.getElementById('detail-modal');
             if (event.target === modal) closeModal();
         }
 
-        // Initial Render
+        // Initialize App
         renderContent();
     </script>
 </body>
