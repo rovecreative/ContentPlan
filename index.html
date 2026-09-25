@@ -1,921 +1,589 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROVE Content Plan - October 2026 (Firestore Studio)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            dark: '#0B0F17',
-                            card: '#131A27',
-                            border: '#1E293B',
-                            emerald: '#10B981',
-                            cyan: '#06B6D4',
-                            amber: '#F59E0B',
-                            purple: '#8B5CF6',
-                            indigo: '#6366F1',
-                            roy: '#3B82F6',
-                            hana: '#EC4899',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #0B0F17;
-            color: #F1F5F9;
-            font-family: 'Inter', sans-serif;
-        }
-        .glass-card {
-            background: rgba(19, 26, 39, 0.75);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.18);
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0B0F17;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1E293B;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROVE Content Plan - October 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- Firebase Compat SDKs for Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f17;
+      color: #f3f4f6;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #111827;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+  </style>
 </head>
-<body class="min-h-screen pb-16 antialiased">
+<body class="min-h-screen custom-scrollbar pb-12">
 
-    <header class="sticky top-0 z-30 border-b border-slate-800 bg-brand-dark/90 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center font-black text-slate-950 text-xl tracking-wider shadow-lg shadow-emerald-500/20">
-                    R
-                </div>
-                <div>
-                    <div class="flex items-center gap-2">
-                        <h1 class="text-xl font-bold tracking-tight text-white">ROVE Content Plan</h1>
-                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/30">October 2026</span>
-                    </div>
-                    <p class="text-xs text-slate-400">Interactive Studio • Realtime Firestore Engine</p>
-                </div>
-            </div>
-
-            <!-- Realtime Sync Indicator -->
-            <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
-                <span id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-                <span id="sync-text" class="text-xs text-slate-300 font-medium">Connecting Firestore...</span>
-            </div>
+  <!-- Header -->
+  <header class="border-b border-gray-800 bg-[#111827]/80 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center font-black text-black text-xl shadow-lg shadow-emerald-500/20">
+          R
         </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-
-        <section class="grid grid-cols-2 md:grid-cols-5 gap-3.5 mb-8">
-            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-indigo-500">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">📝 Writing</span>
-                    <span id="stat-writing" class="text-2xl font-black text-white">0</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-1">Scripting & Concept</p>
-            </div>
-
-            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-amber-500">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">🎨 Designing</span>
-                    <span id="stat-designing" class="text-2xl font-black text-white">0</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-1">Design & Visual Assets</p>
-            </div>
-
-            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-cyan-500">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-cyan-400">✂️ Editing</span>
-                    <span id="stat-editing" class="text-2xl font-black text-white">0</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-1">Video Edit / Cut / SFX</p>
-            </div>
-
-            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-purple-500">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-purple-400">🔄 Revisiting</span>
-                    <span id="stat-revisiting" class="text-2xl font-black text-white">0</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-1">Review & Script Adjust</p>
-            </div>
-
-            <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500 col-span-2 md:col-span-1">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">🚀 Uploaded</span>
-                    <span id="stat-uploaded" class="text-2xl font-black text-white">0</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-1">Ready / Published</p>
-            </div>
-        </section>
-
-        <section class="glass-card p-4 rounded-2xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
-            <!-- Filter Pills -->
-            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto" id="filter-container">
-                <button id="btn-filter-all" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
-                    All
-                </button>
-                <button id="btn-filter-roy" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    👤 Roy
-                </button>
-                <button id="btn-filter-hana" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    👩‍💻 Hana
-                </button>
-                <button id="btn-filter-carousel" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    📸 Carousel
-                </button>
-                <button id="btn-filter-video" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all">
-                    🎥 Video
-                </button>
-                <span class="text-slate-700 hidden lg:inline">|</span>
-                <select id="status-filter" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500">
-                    <option value="all">Semua Status</option>
-                    <option value="Writing">📝 Writing</option>
-                    <option value="Designing">🎨 Designing</option>
-                    <option value="Editing">✂️ Editing</option>
-                    <option value="Revisiting">🔄 Revisiting</option>
-                    <option value="Uploaded">🚀 Uploaded</option>
-                </select>
-            </div>
-
-            <!-- Search Bar & View Switcher -->
-            <div class="flex items-center gap-3 w-full md:w-auto">
-                <div class="relative w-full md:w-64">
-                    <input type="text" id="search-input" placeholder="Cari naskah, topik, hook..." class="w-full bg-slate-900/90 text-xs text-slate-200 placeholder-slate-500 px-3.5 py-2 rounded-xl border border-slate-700/60 focus:outline-none focus:border-emerald-500 transition-all">
-                    <svg class="w-4 h-4 text-slate-500 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-
-                <div class="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800 shrink-0">
-                    <button id="view-grid-btn" class="p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all" title="Grid View">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    </button>
-                    <button id="view-table-btn" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition-all" title="Table View">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Dynamic Content Mount Point -->
-        <div id="content-container"></div>
-
-    </main>
-
-    <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-brand-card border border-slate-700/80 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-            <!-- Modal Header -->
-            <div class="p-5 border-b border-slate-800 flex items-start justify-between bg-slate-900/50">
-                <div class="space-y-1 pr-4">
-                    <div class="flex items-center gap-2 flex-wrap" id="modal-tags"></div>
-                    <h2 class="text-lg font-bold text-white leading-snug mt-1" id="modal-title"></h2>
-                    <p class="text-xs text-slate-400" id="modal-meta"></p>
-                </div>
-                <button id="btn-modal-close-x" class="text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-
-            <!-- Modal Content Body -->
-            <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-300" id="modal-body">
-                <!-- Content dynamically filled -->
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
-                <div id="toast-msg" class="text-xs font-semibold text-emerald-400 opacity-0 transition-opacity">
-                    ⚡ Perubahan Tersinkronisasi ke Firestore!
-                </div>
-                <div class="flex gap-2">
-                    <button id="btn-modal-save" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20">
-                        Simpan & Sync Realtime
-                    </button>
-                    <button id="btn-modal-close" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">
-                        Tutup
-                    </button>
-                </div>
-            </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-xl tracking-tight text-white">ROVE Content Plan</h1>
+            <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-semibold">October 2026</span>
+          </div>
+          <p class="text-xs text-gray-400">Interactive Studio • Real-Time Firebase Engine</p>
         </div>
+      </div>
+
+      <!-- Sync Status Badge -->
+      <div id="syncBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span>Connecting Database...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
+
+    <!-- Status Counter Bar -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div class="bg-gray-900/60 border border-indigo-500/20 rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+            <span>📝 Writing</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Scripting & Concept</p>
+        </div>
+        <span id="count-writing" class="text-2xl font-black text-indigo-400">0</span>
+      </div>
+
+      <div class="bg-gray-900/60 border border-amber-500/20 rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <span>🎨 Designing</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Design & Assets</p>
+        </div>
+        <span id="count-designing" class="text-2xl font-black text-amber-400">0</span>
+      </div>
+
+      <div class="bg-gray-900/60 border border-cyan-500/20 rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+            <span>✂️ Editing</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Video Edit / Cut / SFX</p>
+        </div>
+        <span id="count-editing" class="text-2xl font-black text-cyan-400">0</span>
+      </div>
+
+      <div class="bg-gray-900/60 border border-purple-500/20 rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
+            <span>🔄 Revisiting</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Review & Adjust</p>
+        </div>
+        <span id="count-revisiting" class="text-2xl font-black text-purple-400">0</span>
+      </div>
+
+      <div class="bg-gray-900/60 border border-emerald-500/20 rounded-2xl p-4 flex items-center justify-between col-span-2 md:col-span-1">
+        <div>
+          <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+            <span>🚀 Uploaded</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Ready / Published</p>
+        </div>
+        <span id="count-uploaded" class="text-2xl font-black text-emerald-400">0</span>
+      </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Firebase Configuration Setup
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "AIzaSyCFkgsyOdPxSVVm6RnV35zioSOq7Fptzs8",
-                authDomain: "contentplan-bcbd1.firebaseapp.com",
-                projectId: "contentplan-bcbd1",
-                storageBucket: "contentplan-bcbd1.appspot.com",
-                messagingSenderId: "639365187452",
-                appId: "1:639365187452:web:217d063a4c1e4dd33986f9"
-                databaseURL: "https://contentplan-bcbd1-default-rtdb.asia-southeast1.firebasedatabase.app"
-            };
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rove-content-plan-oct-2026';
-
-        // Initial Seed Items
-        const DEFAULT_DATA = [
-            {
-                id: 1,
-                date: "October 2, 2026",
-                pic: "Roy",
-                type: "Carousel",
-                status: "Writing",
-                pillar: "Mindset & Self-Development",
-                title: "Kenapa 90% Orang Gagal Bangun Aset Digital di 2026?",
-                details: "7 Slides Breakdown",
-                summary: "Bukan karena algoritma, tapi karena Perfectionism Paralysis, Consuming > Producing, dan Hasil Instan Mindset.",
-                slides: [
-                    "Slide 1 (Hook): Bukan karena algoritma, tapi karena 3 jebakan ini.",
-                    "Slide 2: Jebakan #1: Perfectionism Paralysis (Menunggu alat lengkap baru mau upload).",
-                    "Slide 3: Jebakan #2: Consuming > Producing (Lebih banyak nonton tutorial daripada eksekusi).",
-                    "Slide 4: Jebakan #3: Hasil Instan Mindset (Ekspektasi viral di minggu pertama).",
-                    "Slide 5: Pergeseran Pola Pikir: Konten = Aset Digital yang bekerja 24/7.",
-                    "Slide 6: Kerangka Kerja Rove: Done is better than perfect. Fokus pada kuantitas untuk capai kualitas.",
-                    "Slide 7 (CTA): Ketik 'ASET' di komen kalau lu siap lepas dari jebakan ini!"
-                ]
-            },
-            {
-                id: 2,
-                date: "October 5, 2026",
-                pic: "Hana",
-                type: "Video",
-                status: "Editing",
-                pillar: "Teknis Video & Lighting",
-                title: "Cara Bikin Video HP Kelihatan 'Mahal' Cuma Pakai 1 Lampu",
-                details: "45 Seconds Reels",
-                summary: "Teknik memantulkan lampu (wall bounce) untuk menghasilkan soft light sinematik dari HP.",
-                script: [
-                    "[00:00 - 00:05] HOOK: (Hana pegang HP & matikan lampu kamar) 'Stop pake lampu utama kamar kalau mau video lu kelihatan cinematic. Pake trik 1 lampu ini.'",
-                    "[00:05 - 00:20] PROBLEM vs SOLUTION: Sediain 1 lampu portable LED. Jangan tembak langsung ke muka (Harsh light), pantulkan ke tembok putih (Soft light).",
-                    "[00:20 - 00:35] DEMO: Tunjukkan Before (lampu langit-langit, bayangan mata gelap) vs After (teknik wall bounce).",
-                    "[00:35 - 00:45] CTA: 'Simpan video ini buat latihan nanti malam. Mau tutorial color grading-nya juga? Komen di bawah!'"
-                ]
-            },
-            {
-                id: 3,
-                date: "October 8, 2026",
-                pic: "Roy",
-                type: "Carousel",
-                status: "Designing",
-                pillar: "Scriptwriting & Social Media Growth",
-                title: "5 Formula Hook yang Bikin Audience Berhenti Scrolling dalam 3 Detik",
-                details: "8 Slides Breakdown",
-                summary: "Formula Hook paling terbukti: Negative Framing, Contrarian Statement, Curiosity Gap, Direct Callout, & Before-After Proof.",
-                slides: [
-                    "Slide 1 (Hook): Video lu sepi bukan karena materinya jelek, tapi karena 3 detik pertamanya ngebosenin.",
-                    "Slide 2: Formula 1: Negative Framing ('Jangan lakukan X kalau gak mau Y').",
-                    "Slide 3: Formula 2: Contrarian Statement ('Kenapa cara A udah gak berguna di 2026').",
-                    "Slide 4: Formula 3: The Curiosity Gap ('Rahasia yang disembunyiin creator besar...').",
-                    "Slide 5: Formula 4: Direct Callout ('Buat lu yang lagi bingung mulai ngonten...').",
-                    "Slide 6: Formula 5: Before vs After Proof ('Dari 0 views jadi 100k views pake 1 perubahan ini').",
-                    "Slide 7: Kunci Hook Sukses: Relatable + Clear Benefit.",
-                    "Slide 8 (CTA): Save slide ini biar gak bingung waktu bikin naskah besok!"
-                ]
-            },
-            {
-                id: 4,
-                date: "October 11, 2026",
-                pic: "Hana",
-                type: "Video",
-                status: "Editing",
-                pillar: "Teknis Kamera & Export Setting",
-                title: "Settingan Kamera HP Wajib Buat Reels Biar Gak Pecah saat Di-upload",
-                details: "40 Seconds Reels",
-                summary: "Optimasi bitrate kamera HP dan settingan Upload at Highest Quality di Instagram.",
-                script: [
-                    "[00:00 - 00:05] HOOK: (Screen recording HP) 'Bikin video udah HD tapi pas di-upload malah buram? Cek 2 settingan rahasia ini.'",
-                    "[00:05 - 00:20] STEP 1: Rekam di 4K 30fps atau 1080p 60fps. Jangan rekam langsung via kamera internal aplikasi IG/TikTok.",
-                    "[00:20 - 00:30] STEP 2: Buka Setting Instagram -> Account -> Data Usage / Media Quality -> Aktifkan 'Upload at Highest Quality'.",
-                    "[00:30 - 00:40] CTA: 'Coba cek HP lu sekarang, udah nyala belum fiturnya? Share ke temen lu yang videonya masih buram!'"
-                ]
-            },
-            {
-                id: 5,
-                date: "October 13, 2026",
-                pic: "Roy",
-                type: "Carousel",
-                status: "Revisiting",
-                pillar: "Workflow & Management",
-                title: "Cara Bikin Naskah Konten 1 Minggu Cuma Dalam 1 Jam (Sistem Batching)",
-                details: "7 Slides Breakdown",
-                summary: "Sistematisasi naskah dengan Hook-Retain-Reward dan bullet points untuk mencegah burnout.",
-                slides: [
-                    "Slide 1 (Hook): Stop mikir ide konten tiap hari. Ini sistem kerja cerdas tanpa burnout.",
-                    "Slide 2: Langkah 1: Kumpulkan 3 Ide Utama dari Pillar Content lu.",
-                    "Slide 3: Langkah 2: Gunakan struktur Hook - Retain (Value) - Reward (CTA).",
-                    "Slide 4: Langkah 3: Tulis bullet points, bukan menghafal kata demi kata.",
-                    "Slide 5: Contoh Naskah Ringkas (Studi kasus nyata).",
-                    "Slide 6: Keuntungan Batching: Hemat energi, eksekusi rekam video jauh lebih cepat.",
-                    "Slide 7 (CTA): Mau template naskah gratis? Komen 'NASKAH' di bawah."
-                ]
-            },
-            {
-                id: 6,
-                date: "October 16, 2026",
-                pic: "Hana",
-                type: "Video",
-                status: "Editing",
-                pillar: "Video Editing (CapCut/Premiere)",
-                title: "Trik Editing Sound Effect (SFX) yang Bikin Video Lu Gak Bosenin",
-                details: "50 Seconds Reels",
-                summary: "Penggunaan Swoosh, Pop/Click, dan level audio background -18dB s/d -22dB.",
-                script: [
-                    "[00:00 - 00:06] HOOK: (Tunjukkan video tanpa SFX vs dengan SFX) 'Bedanya video amatir sama profesional sering kali cuma ada di audio-nya.'",
-                    "[00:06 - 00:25] TUTORIAL: 1. Pakai sound Swoosh tiap transisi teks. 2. Pakai sound Pop/Click saat elemen visual muncul. 3. Turunkan Backsound ke -18dB sampai -22dB.",
-                    "[00:25 - 00:40] DEMO: Tampilkan timeline editing di CapCut / Premiere Pro.",
-                    "[00:40 - 00:50] CTA: 'Simpan video ini buat panduan pas lu edit video nanti!'"
-                ]
-            },
-            {
-                id: 7,
-                date: "October 19, 2026",
-                pic: "Roy",
-                type: "Carousel",
-                status: "Writing",
-                pillar: "Self-Development & Mindset",
-                title: "'Rasa Malu & Takut Diejek Teman': Hambatan Utama Creator Pemula",
-                details: "8 Slides Breakdown",
-                summary: "Mendobrak gengsi dan spotlight effect dalam membangun aset personal branding.",
-                slides: [
-                    "Slide 1 (Hook): Satu-satunya hal yang menghalangi lu sukses ngonten adalah rasa gengsi.",
-                    "Slide 2: Kenyataan pahit: Teman yang ngejek lu gak akan pernah bayar tagihan bulanan lu.",
-                    "Slide 3: Spotlight Effect: Lu merasa semua orang memperhatikan kesalahan lu, padahal orang lain terlalu sibuk dengan hidup sendiri.",
-                    "Slide 4: Cara mengatasi: Fokus ke 1 orang yang butuh edukasi/solusi dari konten lu, abaikan sisanya.",
-                    "Slide 5: Dokumentasikan proses, bukan sok pamer keahlian.",
-                    "Slide 6: Konsistensi 3 bulan pertama akan menyeleksi siapa yang main-main dan siapa yang serius.",
-                    "Slide 7: Ingat pesan ini: Gengsi tidak menghasilkan aset, karya yang di-upload yang menghasilkan.",
-                    "Slide 8 (CTA): Tag teman lu yang butuh dorongan semangat buat mulai ngonten!"
-                ]
-            },
-            {
-                id: 8,
-                date: "October 22, 2026",
-                pic: "Hana",
-                type: "Video",
-                status: "Editing",
-                pillar: "Teknis Videografi",
-                title: "Rahasia Framing & Komposisi Kamera Biar Lu Kelihatan Pede",
-                details: "45 Seconds Reels",
-                summary: "Aturan Rule of Thirds dan Headroom 2 jari untuk framing portrait yang proporsional.",
-                script: [
-                    "[00:00 - 00:05] HOOK: 'Merasa kaku atau aneh pas ngomong di depan kamera? Bisa jadi karena framing lu salah.'",
-                    "[00:05 - 00:20] RULE OF THIRDS: Aktifkan Grid di kamera HP. Posisikan mata lu persis di garis 1/3 atas layar.",
-                    "[00:20 - 00:35] HEADROOM: Jangan menyisakan ruang terlalu luas di atas kepala. Berikan Headroom secukupnya (sekitar 2 jari).",
-                    "[00:35 - 00:45] CTA: 'Cobain pengaturan ini sekarang. Follow buat tips visual produksi lainnya!'"
-                ]
-            },
-            {
-                id: 9,
-                date: "October 24, 2026",
-                pic: "Roy",
-                type: "Carousel",
-                status: "Revisiting",
-                pillar: "Medsos Management & Strategy",
-                title: "Membedah Anatomi Konten Viral yang Tetap Menghasilkan Penjualan",
-                details: "8 Slides Breakdown",
-                summary: "Menghubungkan viral reach dengan sistem konversi penawaran workshop Rove.",
-                slides: [
-                    "Slide 1 (Hook): Viral tanpa konversi itu cuma vanity metrics. Ini cara gabungin reach dan monetization.",
-                    "Slide 2: Elemen 1: The Stop-Scroll Hook (3 Detik Pertama).",
-                    "Slide 3: Elemen 2: Core Value / Storyline (Poin utama masalah spesifik).",
-                    "Slide 4: Elemen 3: Engagement Trigger (Pertanyaan memicu komentar).",
-                    "Slide 5: Elemen 4: Smooth Bridge to Offer (Menghubungkan materi ke solusi produk/workshop).",
-                    "Slide 6: Elemen 6: Clear Call to Action (Satu instruksi tegas).",
-                    "Slide 7: Contoh studi kasus ringkas struktur konten Rove.",
-                    "Slide 8 (CTA): Save postingan ini sebagai panduan struktur konten lu berikutnya!"
-                ]
-            },
-            {
-                id: 10,
-                date: "October 26, 2026",
-                pic: "Hana",
-                type: "Video",
-                status: "Editing",
-                pillar: "Post-Production & Editing",
-                title: "Trik Color Grading Cepat di HP Pakai Aplikasi Gratisan",
-                details: "50 Seconds Reels",
-                summary: "Atur Highlights (-15), Contrast (+10), dan Saturation (+8) untuk tampilan sinematik.",
-                script: [
-                    "[00:00 - 00:06] HOOK: (Tunjukkan video pucat vs video color grade) 'Ubah video HP yang pucat jadi kayak sinematik cuma dalam 30 detik.'",
-                    "[00:06 - 00:30] STEP-BY-STEP: 1. Turunkan Highlights (-15) biar detail gak overexposure. 2. Naikkan Contrast (+10) dan Saturation (+8). 3. Atur Temperature sedikit hangat/dingin.",
-                    "[00:30 - 00:40] BEFORE/AFTER: Tunjukkan geseran garis Before/After yang dramatis.",
-                    "[00:40 - 00:50] CTA: 'Tulis di komen aplikasi edit apa yang biasa lu pake!'"
-                ]
-            },
-            {
-                id: 11,
-                date: "October 28, 2026",
-                pic: "Roy",
-                type: "Carousel",
-                status: "Writing",
-                pillar: "Workflow & Consistency",
-                title: "Check List Rutinitas Content Creator: Dari Ide Sampai Rilis",
-                details: "7 Slides Breakdown",
-                summary: "Sistem checklist 5 tahap: Riset, Pra-Produksi, Produksi, Pascaproduksi, Evaluasi.",
-                slides: [
-                    "Slide 1 (Hook): Biar gak pusing tiap hari, pake checklist workflow ini.",
-                    "Slide 2: Fase Riset: Catat 5 masalah terbanyak audiens lu minggu ini.",
-                    "Slide 3: Fase Pra-Produksi: Tulis skrip pendek + siapkan b-roll/asset.",
-                    "Slide 4: Fase Produksi: Rekam sekaligus 3-4 video (batching).",
-                    "Slide 5: Fase Pascaproduksi: Edit, beri teks/caption, dan siapkan thumbnail.",
-                    "Slide 6: Fase Evaluasi: Cek insight 24 jam setelah upload (Saves & Shares).",
-                    "Slide 7 (CTA): Komen 'ROVE' kalau lu mau gabung komunitas belajar bareng kita!"
-                ]
-            },
-            {
-                id: 12,
-                date: "October 30, 2026",
-                pic: "Hana",
-                type: "Video",
-                status: "Uploaded",
-                pillar: "Teknis Equipment & Setup",
-                title: "Checklist Alat Ngonten Pemula dari Modal Rp0 sampai Siap Upgrade",
-                details: "55 Seconds Reels",
-                summary: "Panduan bertahap setup studio dari HP + natural light sampai mic wireless & LED.",
-                script: [
-                    "[00:00 - 00:06] HOOK: 'Mau mulai ngonten tapi bingung beli alat apa dulu? Ini urutan prioritasnya.'",
-                    "[00:06 - 00:20] LEVEL 1 (Modal Rp0): HP yang lu punya sekarang + Cahaya matahari dekat jendela.",
-                    "[00:20 - 00:35] LEVEL 2 (Budget Rp100k - Rp300k): Tripod HP murah + Mic Clip-on wireless murah (Prioritas suara jernih > gambar bagus).",
-                    "[00:35 - 00:45] LEVEL 3 (Upgrade): Lampu LED portable & Microphone yang lebih profesional.",
-                    "[00:45 - 00:55] CTA: 'Lu sekarang ada di Level berapa? Tulis di kolom komentar!'"
-                ]
-            }
-        ];
-
-        const STATUSES = ['Writing', 'Designing', 'Editing', 'Revisiting', 'Uploaded'];
-
-        // App States
-        let contentData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-        let currentFilter = 'all';
-        let currentView = 'grid';
-        let activeModalId = null;
+    <!-- Filters & Search Toolbar -->
+    <div class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="setFilter('pic', 'All')" class="filter-pic-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 transition" data-val="All">All (12)</button>
+        <button onclick="setFilter('pic', 'Roy')" class="filter-pic-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition" data-val="Roy">👤 Roy</button>
+        <button onclick="setFilter('pic', 'Hana')" class="filter-pic-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition" data-val="Hana">👩‍💻 Hana</button>
         
-        // Firebase Globals
-        let app, auth, db;
-        let publicCollectionRef;
+        <div class="h-4 w-px bg-gray-800 mx-1"></div>
 
-        const syncDot = document.getElementById('sync-dot');
-        const syncText = document.getElementById('sync-text');
+        <button onclick="setFilter('type', 'All')" class="filter-type-btn active-filter px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500 text-black transition" data-val="All">Semua Format</button>
+        <button onclick="setFilter('type', 'Carousel')" class="filter-type-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition" data-val="Carousel">📑 Carousel</button>
+        <button onclick="setFilter('type', 'Video')" class="filter-type-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition" data-val="Video">🎥 Video</button>
 
-        async function startFirebase() {
-            try {
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
+        <div class="h-4 w-px bg-gray-800 mx-1"></div>
 
-                // Authenticate before querying (Rule 3)
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+        <select id="statusFilter" onchange="setFilter('status', this.value)" class="bg-gray-800 border border-gray-700 text-gray-300 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500">
+          <option value="All">Semua Status</option>
+          <option value="Writing">Writing</option>
+          <option value="Designing">Designing</option>
+          <option value="Editing">Editing</option>
+          <option value="Revisiting">Revisiting</option>
+          <option value="Uploaded">Uploaded</option>
+        </select>
+      </div>
 
-                // Strictly follow Rule 1 for Public Collection path
-                publicCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'items');
+      <div class="relative flex-1 min-w-[200px] max-w-xs">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Cari naskah, topik, hook..." class="w-full bg-gray-950 border border-gray-800 rounded-xl pl-9 pr-4 py-1.5 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-emerald-500">
+      </div>
+    </div>
 
-                // Realtime Sync Listener with Rule 2 compliance (simple query)
-                onSnapshot(publicCollectionRef, (snapshot) => {
-                    if (snapshot.empty) {
-                        // Seed initial data to Firestore
-                        DEFAULT_DATA.forEach(item => {
-                            const itemDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'items', item.id.toString());
-                            setDoc(itemDocRef, item);
-                        });
-                    } else {
-                        const items = [];
-                        snapshot.forEach((docSnap) => {
-                            items.push(docSnap.data());
-                        });
-                        // Sort numerically by ID
-                        items.sort((a, b) => a.id - b.id);
-                        contentData = items;
-                        renderContent();
-                    }
+    <!-- Content Container -->
+    <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Generated Cards Will Render Here -->
+    </div>
 
-                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
-                    syncText.innerText = "Firestore Realtime Active";
-                }, (error) => {
-                    console.error("Firestore Listen Error:", error);
-                    syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
-                    syncText.innerText = "Local Fallback Mode";
-                });
+  </main>
 
-            } catch (err) {
-                console.error("Firebase Auth/Init Error:", err);
-                syncDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
-                syncText.innerText = "Local Fallback Active";
-            }
+  <!-- Edit Full Script Modal -->
+  <div id="editModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+      <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+        <div>
+          <h3 id="modalTitle" class="text-base font-bold text-white">Edit Full Naskah</h3>
+          <p id="modalSubtitle" class="text-xs text-gray-400">Perubahan akan langsung tersimpan secara real-time ke Firebase</p>
+        </div>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-4 custom-scrollbar">
+        <div>
+          <label class="block text-xs font-semibold text-gray-400 mb-1">Status Produksi</label>
+          <select id="modalStatusSelect" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+            <option value="Writing">📝 Writing</option>
+            <option value="Designing">🎨 Designing</option>
+            <option value="Editing">✂️ Editing</option>
+            <option value="Revisiting">🔄 Revisiting</option>
+            <option value="Uploaded">🚀 Uploaded</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-400 mb-1">Deskripsi Ringkas / Summary</label>
+          <input type="text" id="modalSummaryInput" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-400 mb-1">Struktur Naskah / Slide Breakdown (Lengkap)</label>
+          <textarea id="modalScriptInput" rows="10" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-gray-200 font-mono focus:outline-none focus:border-emerald-500 custom-scrollbar"></textarea>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-gray-800 flex items-center justify-end gap-3 bg-gray-950/50 rounded-b-2xl">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white">Batal</button>
+        <button onclick="saveModalChanges()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition">Simpan & Sync</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initial Default Data
+    const initialContents = [
+      {
+        id: "post-1",
+        date: "October 2, 2026",
+        pic: "Roy",
+        type: "Carousel",
+        pillar: "MINDSET & SELF-DEVELOPMENT",
+        title: "Kenapa 90% Orang Gagal Bangun Aset Digital di 2026?",
+        status: "Writing",
+        summary: "Bukan karena algoritma, tapi karena Perfectionism Paralysis, Consuming > Producing, dan Hasil Instan Mindset.",
+        script: "Slide 1: Hook Visual (Text: Bukan karena algoritma, tapi 3 jebakan ini)\nSlide 2: Jebakan #1 Perfectionism Paralysis\nSlide 3: Jebakan #2 Consuming > Producing\nSlide 4: Jebakan #3 Hasil Instan Mindset\nSlide 5: Concept: Konten = Aset Digital 24/7\nSlide 6: Kerangka Kerja Rove (Done > Perfect)\nSlide 7: CTA: Ketik 'ASET' di komen kalau lu siap lepas dari jebakan ini!"
+      },
+      {
+        id: "post-2",
+        date: "October 5, 2026",
+        pic: "Hana",
+        type: "Video",
+        pillar: "TEKNIS VIDEO & LIGHTING",
+        title: "Cara Bikin Video HP Kelihatan 'Mahal' Cuma Pakai 1 Lampu",
+        status: "Designing",
+        summary: "Teknik memantulkan lampu (wall bounce) untuk menghasilkan soft light sinematik dari HP.",
+        script: "[00:00-00:05] Hook: Stop pake lampu utama kamar kalau mau video lu kelihatan sinematik!\n[00:05-00:20] Problem: Hard light bikin bayangan jelek. Solution: Wall Bounce!\n[00:20-00:35] Demo: Before vs After secara visual.\n[00:35-00:45] CTA: Simpan video ini buat latihan nanti malam."
+      },
+      {
+        id: "post-3",
+        date: "October 8, 2026",
+        pic: "Roy",
+        type: "Carousel",
+        pillar: "SCRIPTWRITING & GROWTH",
+        title: "5 Formula Hook yang Bikin Audience Berhenti Scrolling",
+        status: "Editing",
+        summary: "Membahas Negative Framing, Contrarian Statement, Curiosity Gap, Direct Callout, dan Before/After Proof.",
+        script: "Slide 1: Video lu sepi bukan karena materi jelek, tapi 3 detik pertamanya ngebosenin.\nSlide 2: Formula 1 - Negative Framing\nSlide 3: Formula 2 - Contrarian Statement\nSlide 4: Formula 3 - The Curiosity Gap\nSlide 5: Formula 4 - Direct Callout\nSlide 6: Formula 5 - Before vs After Proof\nSlide 7: Kunci Hook: Relatable + Clear Benefit\nSlide 8: CTA: Save slide ini biar gak bingung waktu bikin naskah besok!"
+      },
+      {
+        id: "post-4",
+        date: "October 11, 2026",
+        pic: "Hana",
+        type: "Video",
+        pillar: "TEKNIS KAMERA & EXPORT SETTING",
+        title: "Settingan Kamera HP Wajib Buat Reels Biar Gak Pecah",
+        status: "Revisiting",
+        summary: "Pengaturan rekaman 4K 30fps / 1080p 60fps & mengaktifkan Upload at Highest Quality di Instagram.",
+        script: "[00:00-00:05] Hook: Bikin video HD tapi pas di-upload malah pecah?\n[00:05-00:20] Step 1: Rekam di 4K 30fps / 1080p 60fps kamera bawaan HP.\n[00:20-00:30] Step 2: Buka Setting IG -> Data Usage -> Upload Highest Quality.\n[00:30-00:40] CTA: Cek HP lu sekarang, udah nyala belum fiturnya?"
+      },
+      {
+        id: "post-5",
+        date: "October 13, 2026",
+        pic: "Roy",
+        type: "Carousel",
+        pillar: "WORKFLOW & MANAGEMENT",
+        title: "Cara Bikin Naskah Konten 1 Minggu Cuma Dalam 1 Jam",
+        status: "Writing",
+        summary: "Sistem batching naskah dengan kerangka Hook - Retain - Reward.",
+        script: "Slide 1: Stop mikir ide konten tiap hari. Pake sistem batching cerdas ini.\nSlide 2: Langkah 1 - Kumpulkan 3 Ide Utama\nSlide 3: Langkah 3 - Struktur Hook - Retain - Reward\nSlide 4: Langkah 3 - Tulis Bullet Points, bukan hapalan\nSlide 5: Contoh Naskah Ringkas\nSlide 6: Keuntungan Batching: Hemat energi & eksekusi cepat\nSlide 7: CTA: Mau template naskah gratis? Komen 'NASKAH'!"
+      },
+      {
+        id: "post-6",
+        date: "October 16, 2026",
+        pic: "Hana",
+        type: "Video",
+        pillar: "VIDEO EDITING & SFX",
+        title: "Trik Editing Sound Effect (SFX) yang Bikin Video Dynamic",
+        status: "Designing",
+        summary: "Penggunaan Swoosh, Pop/Click, dan penataan volume backsound (-18dB) di Premiere/CapCut.",
+        script: "[00:00-00:06] Hook: Bedanya video amatir & profesional ada di audio-nya!\n[00:06-00:25] Tutorial: Swoosh di transisi, Pop di elemen baru, Backsound -18dB.\n[00:25-00:40] Demo Timeline CapCut / Premiere Pro.\n[00:40-00:50] CTA: Simpan video ini buat panduan edit nanti!"
+      },
+      {
+        id: "post-7",
+        date: "October 19, 2026",
+        pic: "Roy",
+        type: "Carousel",
+        pillar: "SELF-DEVELOPMENT & MINDSET",
+        title: "'Rasa Malu & Takut Diejek': Hambatan Utama Pemula",
+        status: "Writing",
+        summary: "Mengatasi gengsi, fenomena Spotlight Effect, dan dokumentasi proses.",
+        script: "Slide 1: Satu-satunya yang menghalangi lu sukses ngonten adalah rasa gengsi.\nSlide 2: Teman yang ngejek gak bakal bayar tagihan bulanan lu.\nSlide 3: Spotlight Effect: Orang lain terlalu sibuk dengan diri mereka.\nSlide 4: Cara Mengatasi: Fokus bantu 1 orang yang butuh edukasi lu.\nSlide 5: Dokumentasikan proses, jangan sok pamer keahlian.\nSlide 6: Konsistensi 3 bulan pertama menyeleksi siapa yang serius.\nSlide 7: Gengsi tidak menghasilkan aset, karya yang di-upload yang menghasilkan.\nSlide 8: CTA: Tag temen lu yang butuh dorongan semangat!"
+      },
+      {
+        id: "post-8",
+        date: "October 22, 2026",
+        pic: "Hana",
+        type: "Video",
+        pillar: "TEKNIS VIDEOGRAFI",
+        title: "Rahasia Framing & Komposisi Kamera Biar Lu Pede",
+        status: "Designing",
+        summary: "Aturan Rule of Thirds dan pengelolaan headroom 2 jari agar visual tidak kaku.",
+        script: "[00:00-00:05] Hook: Merasa kaku di depan kamera? Bisa jadi framing lu salah!\n[00:05-00:20] Rule of Thirds: Posisikan mata persis di garis 1/3 atas layar.\n[00:20-00:35] Headroom: Berikan ruang 2 jari di atas kepala.\n[00:35-00:45] CTA: Cobain pengaturan ini sekarang & follow buat tips berikutnya!"
+      },
+      {
+        id: "post-9",
+        date: "October 24, 2026",
+        pic: "Roy",
+        type: "Carousel",
+        pillar: "MEDSOS MANAGEMENT",
+        title: "Anatomi Konten Viral yang Tetap Menghasilkan Penjualan",
+        status: "Editing",
+        summary: "Menggabungkan reach dan konversi monetisasi melalui 5 elemen penting.",
+        script: "Slide 1: Viral tanpa konversi itu cuma vanity metrics. Ini rahasianya.\nSlide 2: Elemen 1 - Stop Scroll Hook\nSlide 3: Elemen 2 - Core Value / Storyline\nSlide 4: Elemen 3 - Engagement Trigger di Komentar\nSlide 5: Elemen 4 - Smooth Bridge to Offer\nSlide 6: Elemen 5 - Clear Call to Action\nSlide 7: Studi kasus struktur konten Rove\nSlide 8: CTA: Save postingan ini sebagai panduan struktur konten lu!"
+      },
+      {
+        id: "post-10",
+        date: "October 26, 2026",
+        pic: "Hana",
+        type: "Video",
+        pillar: "POST-PRODUCTION",
+        title: "Trik Color Grading Cepat di HP Pakai Aplikasi Gratisan",
+        status: "Writing",
+        summary: "Mengatur Highlight (-15), Contrast (+10), dan Saturation (+8) untuk hasil visual sinematik.",
+        script: "[00:00-00:06] Hook: Ubah video HP pucat jadi sinematik cuma 30 detik!\n[00:06-00:30] Step: Highlights -15, Contrast +10, Saturation +8, Temp hangat.\n[00:30-00:40] Demo Before / After yang dramatis.\n[00:40-00:50] CTA: Tulis di komen aplikasi edit apa yang biasa lu pake!"
+      },
+      {
+        id: "post-11",
+        date: "October 28, 2026",
+        pic: "Roy",
+        type: "Carousel",
+        pillar: "WORKFLOW & CONSISTENCY",
+        title: "Checklist Rutinitas Content Creator: Dari Ide Sampai Rilis",
+        status: "Editing",
+        summary: "Langkah-langkah terstruktur dari riset, pra-produksi, produksi, hingga pascaproduksi.",
+        script: "Slide 1: Biar gak pusing tiap hari, pake checklist workflow ini.\nSlide 2: Fase Riset: Catat 5 masalah terbanyak audiens.\nSlide 3: Fase Pra-Produksi: Tulis skrip pendek & siapkan b-roll.\nSlide 4: Fase Produksi: Rekam sekaligus 3-4 video.\nSlide 5: Fase Pascaproduksi: Edit, caption, thumbnail.\nSlide 6: Fase Evaluasi: Cek insight 24 jam setelah upload.\nSlide 7: CTA: Komen 'ROVE' buat gabung komunitas belajar bareng!"
+      },
+      {
+        id: "post-12",
+        date: "October 30, 2026",
+        pic: "Hana",
+        type: "Video",
+        pillar: "TEKNIS EQUIPMENT",
+        title: "Checklist Alat Ngonten Pemula: Modal Rp0 - Siap Upgrade",
+        status: "Uploaded",
+        summary: "Panduan prioritas alat dari HP + Cahaya Jendela hingga Mic Wireless & Lampu LED.",
+        script: "[00:00-00:06] Hook: Mau mulai ngonten tapi bingung beli alat apa dulu?\n[00:06-00:20] Level 1 (Rp0): HP + Cahaya matahari jendela.\n[00:20-00:35] Level 2 (100k-300k): Tripod + Mic Clip-on wireless.\n[00:35-00:45] Level 3: Upgrade Lampu LED & Mic Pro.\n[00:45-00:55] CTA: Lu sekarang ada di Level berapa? Tulis di komen!"
+      }
+    ];
+
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFkgsyOdPxSVVm6RnV35zioSOq7Fptzs8",
+      authDomain: "contentplan-bcbd1.firebaseapp.com",
+      projectId: "contentplan-bcbd1",
+      storageBucket: "contentplan-bcbd1.appspot.com",
+      messagingSenderId: "639365187452",
+      appId: "1:639365187452:web:217d063a4c1e4dd33986f9",
+      databaseURL: "https://contentplan-bcbd1-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    // State Variables
+    let contents = [...initialContents];
+    let filters = { pic: 'All', type: 'All', status: 'All', search: '' };
+    let currentEditingId = null;
+    let databaseRef = null;
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', () => {
+      // Render Initial State immediately
+      renderDashboard();
+
+      // Connect Firebase Realtime Database
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
         }
+        
+        const db = firebase.database();
+        databaseRef = db.ref('rove_content_plan_oct_2026');
 
-        // Write updates to Firestore
-        async function syncDocToFirestore(item) {
-            if (!auth.currentUser) return;
-            try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'items', item.id.toString());
-                await setDoc(docRef, item, { merge: true });
-            } catch (err) {
-                console.error("Firestore Write Error:", err);
-            }
-        }
-
-        function renderContent() {
-            const container = document.getElementById('content-container');
-            if (!container) return;
-
-            const searchVal = (document.getElementById('search-input')?.value || '').toLowerCase();
-            const statusFilter = document.getElementById('status-filter')?.value || 'all';
-
-            const filtered = contentData.filter(item => {
-                const matchesFilter = currentFilter === 'all' || 
-                    item.pic === currentFilter || 
-                    item.type === currentFilter;
-                
-                const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-
-                const matchesSearch = item.title.toLowerCase().includes(searchVal) ||
-                    item.pillar.toLowerCase().includes(searchVal) ||
-                    item.summary.toLowerCase().includes(searchVal) ||
-                    item.date.toLowerCase().includes(searchVal);
-
-                return matchesFilter && matchesStatus && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="glass-card p-12 text-center rounded-2xl">
-                        <p class="text-slate-400 text-sm">Tidak ada naskah yang sesuai dengan kriteria pencarian atau status.</p>
-                    </div>
-                `;
-                updateStats();
-                return;
-            }
-
-            if (currentView === 'grid') {
-                container.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${filtered.map(item => createCardHTML(item)).join('')}
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="glass-card rounded-2xl overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-900/80 text-slate-400 border-b border-slate-800 uppercase tracking-wider">
-                                <tr>
-                                    <th class="p-4">Tanggal</th>
-                                    <th class="p-4">Status</th>
-                                    <th class="p-4">PIC</th>
-                                    <th class="p-4">Format</th>
-                                    <th class="p-4">Pillar & Naskah Topik</th>
-                                    <th class="p-4 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800">
-                                ${filtered.map(item => createTableRowHTML(item)).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-            }
-
-            bindDynamicEvents();
-            updateStats();
-        }
-
-        function createCardHTML(item) {
-            const isRoy = item.pic === 'Roy';
-            const picBadgeClass = isRoy 
-                ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' 
-                : 'bg-pink-500/10 text-pink-400 border-pink-500/20';
-            
-            const typeBadgeClass = item.type === 'Carousel'
-                ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20';
-
-            return `
-                <div class="glass-card rounded-2xl p-5 flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200">
-                    <div>
-                        <div class="flex items-center justify-between gap-2 mb-3">
-                            <span class="text-xs font-medium text-slate-400">${item.date}</span>
-                            <div class="flex items-center gap-1.5">
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold border ${picBadgeClass}">${item.pic}</span>
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold border ${typeBadgeClass}">${item.type}</span>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-2 mb-2">
-                            <p class="text-[11px] font-medium text-emerald-400 tracking-wide uppercase">${item.pillar}</p>
-                            ${getStatusBadgeHTML(item.status, item.id)}
-                        </div>
-
-                        <h3 class="text-base font-bold text-white leading-snug mb-2">${item.title}</h3>
-                        
-                        <!-- Dynamic Summary Input -->
-                        <div class="mb-4">
-                            <label class="block text-[10px] text-slate-500 uppercase font-semibold mb-1">Deskripsi Ringkas (Auto Sync):</label>
-                            <textarea data-summary-id="${item.id}" rows="2" class="summary-textarea w-full bg-slate-900/80 text-xs text-slate-300 p-2 rounded-xl border border-slate-800 focus:outline-none focus:border-emerald-500 transition-all resize-none">${item.summary}</textarea>
-                        </div>
-                    </div>
-
-                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                        <span class="text-[11px] text-slate-500 font-medium">${item.details}</span>
-                        <button data-modal-id="${item.id}" class="btn-open-modal px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all flex items-center gap-1">
-                            <span>Edit Full Naskah</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function createTableRowHTML(item) {
-            const isRoy = item.pic === 'Roy';
-            const picBadgeClass = isRoy 
-                ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' 
-                : 'bg-pink-500/10 text-pink-400 border-pink-500/20';
-
-            return `
-                <tr class="hover:bg-slate-800/40 transition-all">
-                    <td class="p-4 font-medium whitespace-nowrap text-slate-300">${item.date}</td>
-                    <td class="p-4 whitespace-nowrap">${getStatusBadgeHTML(item.status, item.id)}</td>
-                    <td class="p-4"><span class="px-2 py-0.5 rounded-md text-[10px] font-semibold border ${picBadgeClass}">${item.pic}</span></td>
-                    <td class="p-4 whitespace-nowrap">${item.type} <span class="text-slate-500">(${item.details})</span></td>
-                    <td class="p-4">
-                        <div class="font-bold text-white">${item.title}</div>
-                        <div class="text-[11px] text-slate-400">${item.pillar}</div>
-                    </td>
-                    <td class="p-4 text-right">
-                        <button data-modal-id="${item.id}" class="btn-open-modal px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all">
-                            Edit Naskah
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }
-
-        function getStatusBadgeHTML(status, id) {
-            const styleMap = {
-                'Writing': 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/20',
-                'Designing': 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20',
-                'Editing': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
-                'Revisiting': 'bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
-                'Uploaded': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-            };
-
-            const iconMap = {
-                'Writing': '📝',
-                'Designing': '🎨',
-                'Editing': '✂️',
-                'Revisiting': '🔄',
-                'Uploaded': '🚀'
-            };
-
-            return `
-                <button data-cycle-id="${id}" title="Klik untuk berganti status otomatis" class="btn-cycle-status px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${styleMap[status] || 'bg-slate-800 text-slate-300'} transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95">
-                    <span>${iconMap[status] || '•'}</span>
-                    <span>${status}</span>
-                </button>
-            `;
-        }
-
-        // Dynamic event binding after innerHTML renders
-        function bindDynamicEvents() {
-            // Cycle status handlers
-            document.querySelectorAll('.btn-cycle-status').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = parseInt(btn.dataset.cycleId);
-                    cycleStatus(id);
-                });
-            });
-
-            // Edit full modal handlers
-            document.querySelectorAll('.btn-open-modal').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = parseInt(btn.dataset.modalId);
-                    openModal(id);
-                });
-            });
-
-            // Summary textarea sync handlers
-            document.querySelectorAll('.summary-textarea').forEach(tx => {
-                tx.addEventListener('change', (e) => {
-                    const id = parseInt(tx.dataset.summaryId);
-                    updateSummaryText(id, e.target.value);
-                });
-            });
-        }
-
-        function cycleStatus(id) {
-            const item = contentData.find(x => x.id === id);
-            if (!item) return;
-
-            const currentIndex = STATUSES.indexOf(item.status);
-            const nextIndex = (currentIndex + 1) % STATUSES.length;
-            item.status = STATUSES[nextIndex];
-
-            syncDocToFirestore(item);
-            renderContent();
-        }
-
-        function updateSummaryText(id, newText) {
-            const item = contentData.find(x => x.id === id);
-            if (!item) return;
-            item.summary = newText;
-            syncDocToFirestore(item);
-        }
-
-        function updateStats() {
-            const counts = { Writing: 0, Designing: 0, Editing: 0, Revisiting: 0, Uploaded: 0 };
-            contentData.forEach(item => {
-                if (counts[item.status] !== undefined) counts[item.status]++;
-            });
-
-            document.getElementById('stat-writing').innerText = counts.Writing;
-            document.getElementById('stat-designing').innerText = counts.Designing;
-            document.getElementById('stat-editing').innerText = counts.Editing;
-            document.getElementById('stat-revisiting').innerText = counts.Revisiting;
-            document.getElementById('stat-uploaded').innerText = counts.Uploaded;
-        }
-
-        function openModal(id) {
-            const item = contentData.find(x => x.id === id);
-            if (!item) return;
-            activeModalId = id;
-
-            const modal = document.getElementById('detail-modal');
-            const isRoy = item.pic === 'Roy';
-            
-            document.getElementById('modal-tags').innerHTML = `
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold border ${isRoy ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-pink-500/10 text-pink-400 border-pink-500/20'}">${item.pic}</span>
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold border bg-slate-800 text-slate-300 border-slate-700">${item.type}</span>
-                <span class="text-xs font-semibold text-slate-400">Status:</span>
-                <select id="modal-status-select" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-lg px-2 py-1 focus:outline-none focus:border-emerald-500">
-                    ${STATUSES.map(s => `<option value="${s}" ${s === item.status ? 'selected' : ''}>${s}</option>`).join('')}
-                </select>
-            `;
-            
-            document.getElementById('modal-title').innerText = item.title;
-            document.getElementById('modal-meta').innerText = `${item.date} • ${item.pillar} • ${item.details}`;
-
-            const modalBody = document.getElementById('modal-body');
-            const scriptLines = item.type === 'Carousel' ? (item.slides || []).join('\n') : (item.script || []).join('\n');
-            
-            modalBody.innerHTML = `
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Judul / Topik Utama:</label>
-                    <input type="text" id="modal-edit-title" value="${item.title}" class="w-full bg-slate-900 text-sm text-white p-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all font-semibold">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Deskripsi Ringkas / Summary:</label>
-                    <input type="text" id="modal-edit-summary" value="${item.summary}" class="w-full bg-slate-900 text-xs text-slate-200 p-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all">
-                </div>
-
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-semibold text-slate-400">
-                            ${item.type === 'Carousel' ? 'Edit Struktur Slide Carousel (1 Baris = 1 Slide):' : 'Edit Full Script & Timecode (1 Baris = 1 Section):'}
-                        </label>
-                        <span class="text-[10px] text-emerald-400 font-mono">Sync Ready</span>
-                    </div>
-                    <textarea id="modal-edit-lines" rows="10" class="w-full bg-slate-900 text-xs font-mono text-slate-200 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition-all leading-relaxed">${scriptLines}</textarea>
-                </div>
-            `;
-
-            modal.classList.remove('hidden');
-        }
-
-        function saveModalChanges() {
-            if (!activeModalId) return;
-            const item = contentData.find(x => x.id === activeModalId);
-            if (!item) return;
-
-            item.title = document.getElementById('modal-edit-title').value;
-            item.summary = document.getElementById('modal-edit-summary').value;
-            item.status = document.getElementById('modal-status-select').value;
-
-            const linesText = document.getElementById('modal-edit-lines').value;
-            const linesArray = linesText.split('\n').filter(line => line.trim() !== '');
-
-            if (item.type === 'Carousel') {
-                item.slides = linesArray;
-            } else {
-                item.script = linesArray;
-            }
-
-            syncDocToFirestore(item);
-            renderContent();
-
-            const toast = document.getElementById('toast-msg');
-            toast.classList.remove('opacity-0');
-            setTimeout(() => {
-                toast.classList.add('opacity-0');
-                closeModal();
-            }, 600);
-        }
-
-        function closeModal() {
-            document.getElementById('detail-modal').classList.add('hidden');
-            activeModalId = null;
-        }
-
-        // Attach static UI listeners
-        document.getElementById('btn-filter-all').onclick = () => setFilter('all');
-        document.getElementById('btn-filter-roy').onclick = () => setFilter('Roy');
-        document.getElementById('btn-filter-hana').onclick = () => setFilter('Hana');
-        document.getElementById('btn-filter-carousel').onclick = () => setFilter('Carousel');
-        document.getElementById('btn-filter-video').onclick = () => setFilter('Video');
-
-        document.getElementById('status-filter').onchange = renderContent;
-        document.getElementById('search-input').onkeyup = renderContent;
-
-        document.getElementById('view-grid-btn').onclick = () => setView('grid');
-        document.getElementById('view-table-btn').onclick = () => setView('table');
-
-        document.getElementById('btn-modal-close-x').onclick = closeModal;
-        document.getElementById('btn-modal-close').onclick = closeModal;
-        document.getElementById('btn-modal-save').onclick = saveModalChanges;
-
-        function setFilter(filter) {
-            currentFilter = filter;
-            const buttons = {
-                'all': 'btn-filter-all',
-                'Roy': 'btn-filter-roy',
-                'Hana': 'btn-filter-hana',
-                'Carousel': 'btn-filter-carousel',
-                'Video': 'btn-filter-video'
-            };
-
-            Object.keys(buttons).forEach(key => {
-                const btn = document.getElementById(buttons[key]);
-                if (key === filter) {
-                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20";
-                } else {
-                    btn.className = "filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700 transition-all";
-                }
-            });
-            renderContent();
-        }
-
-        function setView(view) {
-            currentView = view;
-            const gridBtn = document.getElementById('view-grid-btn');
-            const tableBtn = document.getElementById('view-table-btn');
-            
-            if (view === 'grid') {
-                gridBtn.className = "p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all";
-                tableBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
-            } else {
-                tableBtn.className = "p-1.5 rounded-lg bg-slate-800 text-emerald-400 transition-all";
-                gridBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
-            }
-            renderContent();
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('detail-modal');
-            if (event.target === modal) closeModal();
-        }
-
-        // Initialize App on DOM Load
-        window.addEventListener('DOMContentLoaded', () => {
-            renderContent();
-            startFirebase();
+        // Real-Time Listener
+        databaseRef.on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data && Array.isArray(data) && data.length > 0) {
+            contents = data;
+          } else {
+            // Seed database if empty
+            databaseRef.set(initialContents);
+          }
+          
+          updateSyncStatus('online');
+          renderDashboard();
+        }, (error) => {
+          console.warn("Firebase sync error:", error);
+          updateSyncStatus('offline');
         });
-    </script>
+
+      } catch (err) {
+        console.warn("Firebase initialization skipped:", err);
+        updateSyncStatus('offline');
+      }
+    });
+
+    // Sync Badge Indicator Update
+    function updateSyncStatus(status) {
+      const badge = document.getElementById('syncBadge');
+      if (status === 'online') {
+        badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Realtime Database Active</span>`;
+      } else {
+        badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span><span>Local Session Mode</span>`;
+      }
+    }
+
+    // Status Styling Helper
+    function getStatusBadge(status) {
+      const styles = {
+        Writing: { bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', text: 'text-indigo-400', label: '📝 Writing' },
+        Designing: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400', label: '🎨 Designing' },
+        Editing: { bg: 'bg-cyan-500/10', border: 'border-cyan-500/20', text: 'text-cyan-400', label: '✂️ Editing' },
+        Revisiting: { bg: 'bg-purple-500/10', border: 'border-purple-500/20', text: 'text-purple-400', label: '🔄 Revisiting' },
+        Uploaded: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400', label: '🚀 Uploaded' }
+      };
+      return styles[status] || styles.Writing;
+    }
+
+    // Cycle Status on Click
+    function cycleStatus(id, e) {
+      if(e) e.stopPropagation();
+      const statusOrder = ['Writing', 'Designing', 'Editing', 'Revisiting', 'Uploaded'];
+      const index = contents.findIndex(c => c.id === id);
+      if (index !== -1) {
+        const currentStatus = contents[index].status || 'Writing';
+        const nextIndex = (statusOrder.indexOf(currentStatus) + 1) % statusOrder.length;
+        contents[index].status = statusOrder[nextIndex];
+        
+        saveToDatabase();
+        renderDashboard();
+      }
+    }
+
+    // Update Inline Summary
+    function updateSummary(id, val) {
+      const index = contents.findIndex(c => c.id === id);
+      if (index !== -1) {
+        contents[index].summary = val;
+        saveToDatabase();
+      }
+    }
+
+    // Save Data to Firebase
+    function saveToDatabase() {
+      if (databaseRef) {
+        databaseRef.set(contents).catch(err => console.error("Error saving to Firebase:", err));
+      }
+    }
+
+    // Render Main Dashboard & Counter
+    function renderDashboard() {
+      // Counter Updates
+      const counts = { Writing: 0, Designing: 0, Editing: 0, Revisiting: 0, Uploaded: 0 };
+      contents.forEach(c => {
+        if (counts[c.status] !== undefined) counts[c.status]++;
+      });
+
+      document.getElementById('count-writing').innerText = counts.Writing;
+      document.getElementById('count-designing').innerText = counts.Designing;
+      document.getElementById('count-editing').innerText = counts.Editing;
+      document.getElementById('count-revisiting').innerText = counts.Revisiting;
+      document.getElementById('count-uploaded').innerText = counts.Uploaded;
+
+      // Filter Logic
+      const filtered = contents.filter(item => {
+        const matchPic = filters.pic === 'All' || item.pic === filters.pic;
+        const matchType = filters.type === 'All' || item.type === filters.type;
+        const matchStatus = filters.status === 'All' || item.status === filters.status;
+        const matchSearch = !filters.search || 
+          item.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+          item.summary.toLowerCase().includes(filters.search.toLowerCase()) ||
+          item.pillar.toLowerCase().includes(filters.search.toLowerCase());
+        return matchPic && matchType && matchStatus && matchSearch;
+      });
+
+      // Render Cards
+      const container = document.getElementById('contentGrid');
+      container.innerHTML = '';
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-gray-500">
+            <i class="fa-solid fa-folder-open text-3xl mb-3"></i>
+            <p class="text-sm">Tidak ada konten yang sesuai dengan filter.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const statusStyle = getStatusBadge(item.status);
+        const card = document.createElement('div');
+        card.className = "bg-gray-900/70 border border-gray-800 hover:border-gray-700 rounded-2xl p-5 flex flex-col justify-between transition group shadow-lg";
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-gray-400">${item.date}</span>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${item.pic === 'Roy' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-pink-500/10 text-pink-400 border border-pink-500/20'}">${item.pic}</span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-gray-800 text-gray-300">${item.type}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold tracking-wider text-emerald-400 uppercase">${item.pillar}</span>
+              <button onclick="cycleStatus('${item.id}', event)" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition cursor-pointer ${statusStyle.bg} ${statusStyle.border} ${statusStyle.text} hover:opacity-80">
+                ${statusStyle.label}
+              </button>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3 group-hover:text-emerald-400 transition leading-snug">${item.title}</h3>
+
+            <div class="mb-4">
+              <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Deskripsi Ringkas (Auto Sync):</label>
+              <input type="text" value="${item.summary}" onchange="updateSummary('${item.id}', this.value)" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1.5 text-xs text-gray-300 focus:outline-none focus:border-emerald-500 transition">
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-gray-800/60 flex items-center justify-between">
+            <span class="text-[11px] text-gray-500">${item.type === 'Carousel' ? '📑 Slide Structure' : '🎥 Timed Script'}</span>
+            <button onclick="openModal('${item.id}')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 hover:bg-gray-700 text-white transition flex items-center gap-1.5">
+              <span>Edit Full Naskah</span>
+              <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+            </button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // Filter Controls
+    function setFilter(type, value) {
+      filters[type] = value;
+      
+      if (type === 'pic') {
+        document.querySelectorAll('.filter-pic-btn').forEach(btn => {
+          btn.classList.toggle('bg-emerald-500', btn.dataset.val === value);
+          btn.classList.toggle('text-black', btn.dataset.val === value);
+          btn.classList.toggle('bg-gray-800', btn.dataset.val !== value);
+          btn.classList.toggle('text-gray-300', btn.dataset.val !== value);
+        });
+      }
+
+      if (type === 'type') {
+        document.querySelectorAll('.filter-type-btn').forEach(btn => {
+          btn.classList.toggle('bg-emerald-500', btn.dataset.val === value);
+          btn.classList.toggle('text-black', btn.dataset.val === value);
+          btn.classList.toggle('bg-gray-800', btn.dataset.val !== value);
+          btn.classList.toggle('text-gray-300', btn.dataset.val !== value);
+        });
+      }
+
+      renderDashboard();
+    }
+
+    function handleSearch(val) {
+      filters.search = val;
+      renderDashboard();
+    }
+
+    // Modal Operations
+    function openModal(id) {
+      currentEditingId = id;
+      const item = contents.find(c => c.id === id);
+      if (!item) return;
+
+      document.getElementById('modalTitle').innerText = item.title;
+      document.getElementById('modalSubtitle').innerText = `${item.date} • ${item.pic} • ${item.type}`;
+      document.getElementById('modalStatusSelect').value = item.status;
+      document.getElementById('modalSummaryInput').value = item.summary;
+      document.getElementById('modalScriptInput').value = item.script;
+
+      document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      currentEditingId = null;
+      document.getElementById('editModal').classList.add('hidden');
+    }
+
+    function saveModalChanges() {
+      if (!currentEditingId) return;
+
+      const index = contents.findIndex(c => c.id === currentEditingId);
+      if (index !== -1) {
+        contents[index].status = document.getElementById('modalStatusSelect').value;
+        contents[index].summary = document.getElementById('modalSummaryInput').value;
+        contents[index].script = document.getElementById('modalScriptInput').value;
+
+        saveToDatabase();
+        renderDashboard();
+        closeModal();
+      }
+    }
+  </script>
 </body>
 </html>
